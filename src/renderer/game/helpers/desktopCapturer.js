@@ -4,9 +4,7 @@ import {
   GAME_WINDOW_NAME,
   GAME_WINDOW_WIDTH,
   GAME_WINDOW_HEIGHT,
-  SEND_VIDEO_SCREEN,
 } from '../../../_shared/constants'
-import { send } from '../../_shared/messageHelper'
 
 
 const cv = remote.require('opencv4nodejs')
@@ -28,7 +26,7 @@ export const getGameWindowSource = () => new Promise(resolve => {
   })
 })
 
-export const startMediaStream = () => getGameWindowSource().then(source => navigator.mediaDevices.getUserMedia({
+export const startMediaStream = (processFrame) => getGameWindowSource().then(source => navigator.mediaDevices.getUserMedia({
     audio: false,
     video: {
       mandatory: {
@@ -40,10 +38,10 @@ export const startMediaStream = () => getGameWindowSource().then(source => navig
         maxHeight: GAME_WINDOW_HEIGHT,
       },
     },
-  }).then(handleMediaStream),
+  }).then(handleMediaStream(processFrame)),
 )
 
-export const handleMediaStream = MediaStream => {
+export const handleMediaStream = processFrame => MediaStream => {
   const video = document.createElement('video')
   const canvas = document.createElement('canvas')
   canvas.width = GAME_WINDOW_WIDTH
@@ -52,29 +50,19 @@ export const handleMediaStream = MediaStream => {
   video.srcObject = MediaStream
   video.onloadedmetadata = () => {
     video.play()
-    stream(video, canvas)
+    stream(video, canvas, processFrame)
   }
 }
 
-export const stream = (video, canvas) => {
+export const stream = (video, canvas, processFrame) => {
   canvas.getContext('2d').drawImage(video, 0, 0, GAME_WINDOW_WIDTH, GAME_WINDOW_HEIGHT)
   canvas.toBlob((blob) => {
     toBuffer(blob, (err, buffer) => {
       const mat = cv.imdecode(buffer)
-      const smallMat = mat.rescale(1)
-      cv.imshow('mat', smallMat);
-
-      // TODO: Make this work
-      // This is supposed to send the mat buffer to the main window
-      // mat.getDataAsync((error, buffer) => {
-      //   if (error) {
-      //     throw error
-      //   }
-      //   // send(SEND_VIDEO_SCREEN, new Uint8Array(buffer))
-      // })
-
+      const smallMat = mat.rescale(0.5)
+      processFrame(smallMat)
       setTimeout(() => {
-        stream(video, canvas)
+        stream(video, canvas, processFrame)
       }, 1000 / FPS)
     })
   })

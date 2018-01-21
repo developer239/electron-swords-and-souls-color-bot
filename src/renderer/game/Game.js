@@ -1,4 +1,5 @@
 import React from 'react'
+import { remote } from 'electron'
 import PropTypes from 'prop-types'
 import { compose, lifecycle, withState, withHandlers } from 'recompose'
 import {
@@ -10,14 +11,16 @@ import {
 import { startMediaStream } from './helpers/desktopCapturer'
 
 
+const cv = remote.require('opencv4nodejs')
+
 const TYPES = ['apple', 'star']
 
 const Game = ({ handleLowerColorChange, lowerColor, handleUpperColorChange, upperColor, blur, handleBlurChange }) => (
   <Container>
     <Content>
       <Row>
-        {TYPES.map(type => (
-          <Column>
+        {TYPES.map((type, index) => (
+          <Column key={`${type}-${index}`}>
             {/* LOWER COLOR */}
             <h3>{type}</h3>
             Lower Color: <br />
@@ -85,7 +88,7 @@ const Game = ({ handleLowerColorChange, lowerColor, handleUpperColorChange, uppe
 )
 
 Game.propTypes = {
-  blur: PropTypes.number.isRequired,
+  blur: PropTypes.object.isRequired,
   lowerColor: PropTypes.object.isRequired,
   upperColor: PropTypes.object.isRequired,
   handleLowerColorChange: PropTypes.func.isRequired,
@@ -99,21 +102,26 @@ const enhance = compose(
   withState('blur', 'setBlur', { apple: 10, star: 5 }),
   withHandlers({
     handleLowerColorChange: ({ setLowerColor, lowerColor }) => (type, key) => (event) => {
-      lowerColor[type][key] = event.target.value
+      lowerColor[type][key] = parseInt(event.target.value, 10)
       setLowerColor(lowerColor)
     },
     handleUpperColorChange: ({ setUpperColor, upperColor }) => (type, key) => (event) => {
-      upperColor[type][key] = event.target.value
+      upperColor[type][key] = parseInt(event.target.value, 10)
       setUpperColor(upperColor)
     },
     handleBlurChange: ({ setBlur, blur }) => type => (event) => {
-      blur[type] = event.target.value
+      blur[type] = parseInt(event.target.value, 10)
       setBlur(blur)
+    },
+    handleStreamFrame: ({ blur }) => mat => {
+      console.log('frame changed ', blur)
+      cv.imshow('mat', mat);
     },
   }),
   lifecycle({
     componentDidMount() {
-      startMediaStream()
+      const handleStreamFrame = this.props.handleStreamFrame
+      startMediaStream(handleStreamFrame)
     },
   }),
 )
