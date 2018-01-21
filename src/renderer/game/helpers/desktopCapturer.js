@@ -11,7 +11,7 @@ import { send } from '../../_shared/messageHelper'
 
 const cv = remote.require('opencv4nodejs')
 
-const FPS = 1
+const FPS = 15
 
 export const getGameWindowSource = () => new Promise(resolve => {
   desktopCapturer.getSources({ types: ['window'] }, (error, sources) => {
@@ -61,6 +61,8 @@ export const stream = (video, canvas) => {
   canvas.toBlob((blob) => {
     toBuffer(blob, (err, buffer) => {
       const mat = cv.imdecode(buffer)
+      const smallMat = mat.rescale(1)
+      cv.imshow('mat', smallMat);
 
       // TODO: Make this work
       // This is supposed to send the mat buffer to the main window

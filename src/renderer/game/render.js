@@ -1,6 +1,6 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
-import Main from './Main'
+import Game from './Game'
 
 
-ReactDOM.render(<Main />, document.getElementById('app'))
+ReactDOM.render(<Game />, document.getElementById('app'))

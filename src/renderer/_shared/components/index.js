@@ -6,6 +6,8 @@ import Input from './Input'
 import SubHeader from './SubHeader'
 import Text from './Text'
 import Value from './Value'
+import Row from './Row'
+import Column from './Column'
 
 
 export {
@@ -17,4 +19,6 @@ export {
   SubHeader,
   Text,
   Value,
+  Row,
+  Column,
 }
