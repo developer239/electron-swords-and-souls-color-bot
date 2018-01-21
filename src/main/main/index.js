@@ -1,5 +1,7 @@
 const app = require('electron').app
 const windowHelper = require('../_shared/windowHelper')
+const messageHelper = require('../_shared/messageHelper')
+const constants = require('../../_shared/constants')
 
 
 // We need to keep reference to this object
@@ -14,9 +16,13 @@ const createMainWindow = () => windowHelper.createWindow(mainWindow)(
     x: 0,
     y: 0,
     height: 620,
-    width: 450,
+    width: 600,
   },
 )
+
+messageHelper.listenTo(constants.SEND_VIDEO_SCREEN, (event, args) => {
+  messageHelper.send(mainWindow)(constants.SEND_VIDEO_SCREEN, args.payload)
+})
 
 // Create main window when application is ready
 app.on('ready', createMainWindow)

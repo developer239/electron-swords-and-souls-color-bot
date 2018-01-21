@@ -21,7 +21,7 @@ const createMainWindow = () => windowHelper.createWindow(gameWindow)(
   },
 )
 
-const createHiddenGameWindow = () => windowHelper.createWindow(hiddenGameWindow)(
+const createHiddenGameWindow = () => windowHelper.createWindow(gameWindow)(
   'game',
   {
     x: 600,
