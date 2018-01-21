@@ -1,0 +1,41 @@
+{
+  "name": "electron-es6-react",
+  "version": "0.0.0",
+  "main": "main.js",
+  "license": "MIT",
+  "scripts": {
+    "install": "electron-rebuild -w opencv4nodejs",
+    "electron-rebuild": "electron-rebuild -w opencv4nodejs",
+    "start": "NODE_ENV=develop electron -r babel-register .",
+    "lint": "eslint ./renderer --fix && eslint ./main --fix",
+    "build": "NODE_ENV=production webpack -p",
+    "package-mac": "rm -rf release-builds && electron-packager  --overwrite --platform=darwin --arch=x64 --icon=assets/icons/mac/icon.icns --out=release-builds",
+    "package-win": "rm -rf release-builds && electron-packager . electron-react --overwrite --asar=true --platform=win32 --arch=ia32 --icon=assets/icons/win/icon.ico --prune=true --out=release-builds --version-string.CompanyName=CE --version-string.FileDescription=CE --version-string.ProductName=\"Electron React\"",
+    "package-linux": "rm -rf release-builds && electron-packager . electron-react --overwrite --asar=true --platform=linux --arch=x64 --icon=assets/icons/png/icon.png --prune=true --out=release-builds"
+  },
+  "dependencies": {
+    "electron": "^1.8.2-beta.2",
+    "electron-rebuild": "^1.7.3",
+    "opencv4nodejs": "^2.37.1",
+    "prop-types": "^15.6.0",
+    "react": "^16.2.0",
+    "react-dom": "^16.2.0",
+    "recompose": "^0.26.0",
+    "styled-components": "^2.4.0"
+  },
+  "devDependencies": {
+    "@strv/eslint-config-javascript": "^7.9.0",
+    "babel-eslint": "^8.2.1",
+    "babel-loader": "^7.1.2",
+    "babel-plugin-transform-class-properties": "^6.24.1",
+    "babel-plugin-transform-object-rest-spread": "^6.26.0",
+    "babel-preset-env": "^2.0.0-beta.2",
+    "babel-preset-react": "^7.0.0-beta.3",
+    "babel-register": "^7.0.0-beta.3",
+    "clean-webpack-plugin": "^0.1.17",
+    "electron-packager": "^10.1.1",
+    "eslint": "^4.13.1",
+    "uglifyjs-webpack-plugin": "^1.1.6",
+    "webpack": "^3.10.0"
+  }
+}
