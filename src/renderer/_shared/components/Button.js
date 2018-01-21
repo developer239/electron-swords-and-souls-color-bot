@@ -25,7 +25,7 @@ export default styled.button`
     
   &:hover {
     color: #FFF;
-    background-color: #39a1f4;
+    background-color: #795548;
     outline: 0;
     text-decoration: none;
     border: none;

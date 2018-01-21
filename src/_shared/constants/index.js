@@ -1,12 +1,8 @@
-const OPEN_COUNTER_WINDOW = 'open-counter-window'
+const OPEN_GAME_WINDOW = 'open-game-window'
+const CLOSE_GAME_WINDOW = 'close-game-window'
 
-const COUNTER_INCREMENT = 'counter-increment'
-const COUNTER_DECREMENT = 'counter-decrement'
-const COUNTER_SET_VALUE = 'counter-set-value'
 
 module.exports = {
-  OPEN_COUNTER_WINDOW,
-  COUNTER_INCREMENT,
-  COUNTER_DECREMENT,
-  COUNTER_SET_VALUE,
+  OPEN_GAME_WINDOW,
+  CLOSE_GAME_WINDOW,
 }

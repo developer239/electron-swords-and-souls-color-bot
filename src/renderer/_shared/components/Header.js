@@ -4,7 +4,7 @@ import styled from 'styled-components'
 
 
 const HeaderContainer = styled.div`
-  background-color: #03a9f4;
+  background-color: #795548;
   width: 100%;
   padding: 28px 28px 10px 28px;
 `

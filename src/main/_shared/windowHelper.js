@@ -1,7 +1,7 @@
 const BrowserWindow = require('electron').BrowserWindow
 
 
-const property = (obj, key) => obj && obj.hasOwnProperty(key) ? obj[key] : false
+const property = (obj, key) => obj && obj.hasOwnProperty(key) ? obj[key] : undefined
 
 const generateWindowObject = () => ({
   isOpen: false,
@@ -15,10 +15,14 @@ const createWindow = windowReference => (name, options, special) => {
     height: property(options, 'height') || 600,
     x: property(options, 'x'),
     y: property(options, 'y'),
+    frame: property(options, 'frame'),
+    webPreferences: {
+      plugins: special && special.webPreferencesPlugins || false,
+    }
   })
 
   newWindow.setResizable(true)
-  newWindow.loadURL(`file://${__dirname}/../../renderer/${name}/index.html`)
+  newWindow.loadURL(name ? `file://${__dirname}/../../renderer/${name}/index.html` : special.url)
   newWindow.once('ready-to-show', newWindow.show)
 
   if (special && special.touchBar) {
