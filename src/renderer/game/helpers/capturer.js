@@ -9,13 +9,13 @@ import {
 
 const cv = remote.require('opencv4nodejs')
 
-const FPS = 15
-
 export const getGameWindowSource = () => new Promise(resolve => {
   desktopCapturer.getSources({ types: ['window'] }, (error, sources) => {
     if (error) {
       throw error
     }
+
+    console.log('sources ', sources)
 
     for (let i = 0; i < sources.length; ++i) {
       const window = sources[i]
@@ -59,11 +59,8 @@ export const stream = (video, canvas, processFrame) => {
   canvas.toBlob((blob) => {
     toBuffer(blob, (err, buffer) => {
       const mat = cv.imdecode(buffer)
-      const smallMat = mat.rescale(0.5)
-      processFrame(smallMat)
-      setTimeout(() => {
-        stream(video, canvas, processFrame)
-      }, 1000 / FPS)
+      processFrame(mat)
+      stream(video, canvas, processFrame)
     })
   })
 }

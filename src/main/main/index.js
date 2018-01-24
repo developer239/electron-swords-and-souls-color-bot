@@ -15,7 +15,7 @@ const createMainWindow = () => windowHelper.createWindow(mainWindow)(
   {
     x: 0,
     y: 0,
-    height: 620,
+    height: 820,
     width: 600,
   },
 )

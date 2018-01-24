@@ -16,8 +16,9 @@ const createMainWindow = () => windowHelper.createWindow(gameWindow)(
     frame: false,
   },
   {
-    url: 'https://www.youtube.com/watch?v=PjGkVCAo8Fw',
+    url: 'http://www.webgames.cz/swords-and-soul/6053-0',
     webPreferencesPlugins: true,
+    webPreferencesZoomFactor: 0.5,
   },
 )
 

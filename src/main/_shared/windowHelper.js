@@ -18,6 +18,7 @@ const createWindow = windowReference => (name, options, special) => {
     frame: property(options, 'frame'),
     webPreferences: {
       plugins: special && special.webPreferencesPlugins || false,
+      zoomFactor: special && special.webPreferencesZoomFactor || 1,
     }
   })
 

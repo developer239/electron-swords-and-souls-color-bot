@@ -9,7 +9,6 @@ import {
   GAME_WINDOW_WIDTH,
 } from '../../_shared/constants'
 import { send, listenTo } from '../_shared/messageHelper'
-import { Uint8ToBase64 } from './helpers/array'
 import {
   Container,
   Content,
@@ -20,26 +19,40 @@ import ContentOpened from './components/ContentOpened'
 import ContentClosed from './components/ContentClosed'
 
 
+const MODIFIER = 1.5
+
 class Main extends Component {
-  // TODO: Refactor this so that it can be in recompose lifecycle
   constructor() {
     super()
 
     const image = new Image()
 
-    // TODO: Make this code work
-    // This is supposed to convert buffer to base64 string and draw it on canvas
-    // listenTo(SEND_VIDEO_SCREEN, (event, args) => {
-    //   const base64String = Uint8ToBase64(args.payload)
-    //
-    //   const canvas = this.canvas
-    //   const context = canvas.getContext('2d')
-    //
-    //   image.onload = () => {
-    //     context.drawImage(image, 0, 0, GAME_WINDOW_WIDTH / 2, GAME_WINDOW_HEIGHT / 2)
-    //   }
-    //   image.src = `data:image/png;base64,${base64String}`
-    // })
+    listenTo(SEND_VIDEO_SCREEN, (event, args) => {
+      this.startFps()
+      this.logFps()
+
+      const context = this.canvas.getContext('2d')
+      image.onload = () => {
+        context.drawImage(image, 0, 0, GAME_WINDOW_WIDTH * MODIFIER, GAME_WINDOW_HEIGHT * MODIFIER)
+      }
+      image.src = `data:image/jpeg;base64,${args.payload}`
+
+      this.endFps()
+    })
+  }
+
+  startFps() {
+    this.now = Date.now() / 1000
+  }
+
+  endFps() {
+    this.then = Date.now() / 1000
+  }
+
+  logFps() {
+    const elapsedTime = this.now - this.then
+    const fps = 1 / elapsedTime
+    console.log(fps.toFixed(2))
   }
 
   render() {
@@ -69,8 +82,8 @@ class Main extends Component {
             ref={canvas => {
               this.canvas = canvas
             }}
-            width={GAME_WINDOW_WIDTH / 2}
-            height={GAME_WINDOW_HEIGHT / 2}
+            width={GAME_WINDOW_WIDTH * MODIFIER}
+            height={GAME_WINDOW_HEIGHT * MODIFIER}
           />
         </Container>
       )

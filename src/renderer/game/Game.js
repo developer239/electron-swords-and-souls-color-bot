@@ -1,5 +1,4 @@
 import React from 'react'
-import { remote } from 'electron'
 import PropTypes from 'prop-types'
 import { compose, lifecycle, withState, withHandlers } from 'recompose'
 import {
@@ -8,12 +7,14 @@ import {
   Row,
   Column,
 } from '../_shared/components'
-import { startMediaStream } from './helpers/desktopCapturer'
+import { startMediaStream } from './helpers/capturer'
+import { handleFrame } from './helpers/recognition'
 
-
-const cv = remote.require('opencv4nodejs')
 
 const TYPES = ['apple', 'star']
+const LOWER_COLORS = { apple: { b: 10, g: 10, r: 130 }, star: { b: 0, g: 100, r: 200 } }
+const UPPER_COLORS = { apple: { b: 200, g: 65, r: 255 }, star: { b: 130, g: 255, r: 255 } }
+const BLUR = { apple: 10, star: 5 }
 
 const Game = ({ handleLowerColorChange, lowerColor, handleUpperColorChange, upperColor, blur, handleBlurChange }) => (
   <Container>
@@ -97,9 +98,9 @@ Game.propTypes = {
 }
 
 const enhance = compose(
-  withState('lowerColor', 'setLowerColor', { apple: { b: 10, g: 10, r: 130 }, star: { b: 0, g: 100, r: 200 } }),
-  withState('upperColor', 'setUpperColor', { apple: { b: 200, g: 65, r: 255 }, star: { b: 130, g: 255, r: 255 } }),
-  withState('blur', 'setBlur', { apple: 10, star: 5 }),
+  withState('lowerColor', 'setLowerColor', LOWER_COLORS),
+  withState('upperColor', 'setUpperColor', UPPER_COLORS),
+  withState('blur', 'setBlur', BLUR),
   withHandlers({
     handleLowerColorChange: ({ setLowerColor, lowerColor }) => (type, key) => (event) => {
       lowerColor[type][key] = parseInt(event.target.value, 10)
@@ -113,10 +114,7 @@ const enhance = compose(
       blur[type] = parseInt(event.target.value, 10)
       setBlur(blur)
     },
-    handleStreamFrame: ({ blur }) => mat => {
-      console.log('frame changed ', blur)
-      cv.imshow('mat', mat);
-    },
+    handleStreamFrame: () => handleFrame,
   }),
   lifecycle({
     componentDidMount() {
