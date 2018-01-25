@@ -1,7 +1,8 @@
-const app = require('electron').app
+const { app, globalShortcut } = require('electron')
 const windowHelper = require('../_shared/windowHelper')
 const messageHelper = require('../_shared/messageHelper')
 const constants = require('../../_shared/constants')
+const gameWindow = require('../game')
 
 
 // We need to keep reference to this object
@@ -16,7 +17,7 @@ const createMainWindow = () => windowHelper.createWindow(mainWindow)(
     x: 0,
     y: 0,
     height: 820,
-    width: 600,
+    width: 655,
   },
 )
 
@@ -32,4 +33,20 @@ app.on('activate', () => {
   if (!mainWindow.isOpen) {
     createMainWindow()
   }
+})
+
+app.on('ready', () => {
+  globalShortcut.register('Command+B', () => {
+    if (!gameWindow.hiddenGameWindow.isOpen) {
+      gameWindow.createHiddenGameWindow()
+      messageHelper.send(mainWindow)(constants.OPEN_GAME_WINDOW)
+    }
+  })
+
+  globalShortcut.register('Command+J', () => {
+    if (gameWindow.hiddenGameWindow.isOpen) {
+      gameWindow.hiddenGameWindow.window.close()
+      messageHelper.send(mainWindow)(constants.CLOSE_GAME_WINDOW)
+    }
+  })
 })

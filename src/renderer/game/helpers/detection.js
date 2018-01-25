@@ -19,6 +19,7 @@ export const handleFrame = ({ lowerColor, upperColor, blur }) => (mat) => {
 
   const targetMat = getRegion(mat, { x: cutX, y: cutY }, 500, 300)
   const rescaledMat = targetMat.rescale(1 / scale)
+
   TYPES.map((type) => {
     const matMasked = getMask(rescaledMat, colorObjectToVector(lowerColor[type]), colorObjectToVector(upperColor[type]), blur[type])
     const matches = findNonZeroMatches(matMasked)
@@ -35,6 +36,9 @@ export const handleFrame = ({ lowerColor, upperColor, blur }) => (mat) => {
       )
     })
   })
+
+  console.timeEnd('stream')
+  console.time('stream')
 
   const base64 = cv.imencode('.jpg', mat).toString('base64')
   send(SEND_VIDEO_SCREEN, base64)

@@ -27,3 +27,8 @@ messageHelper.listenTo(constants.CLOSE_GAME_WINDOW, () => {
     hiddenGameWindow.window.close()
   }
 })
+
+module.exports = {
+  hiddenGameWindow,
+  createHiddenGameWindow,
+}

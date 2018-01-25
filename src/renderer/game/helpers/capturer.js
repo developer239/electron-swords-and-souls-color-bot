@@ -52,19 +52,18 @@ export const handleMediaStream = processFrame => MediaStream => {
   video.srcObject = MediaStream
   video.onloadedmetadata = () => {
     video.play()
-    stream(video, canvas, processFrame)
+    stream(video, canvas, processFrame, 1)
   }
 }
 
-export const stream = (video, canvas, processFrame) => {
-  console.time('stream')
+export const stream = (video, canvas, processFrame, index) => {
   canvas.getContext('2d').drawImage(video, 0, 0, GAME_WINDOW_WIDTH, GAME_WINDOW_HEIGHT)
   canvas.toBlob((blob) => {
     toBuffer(blob, (err, buffer) => {
       const mat = cv.imdecode(buffer)
-      processFrame(mat)
-      stream(video, canvas, processFrame)
-      console.timeEnd('stream')
+      processFrame(mat, index)
+      stream(video, canvas, processFrame, index)
+      index += 1
     })
   })
 }

@@ -5,7 +5,7 @@ import {
 
 
 const ContentClosed = () => (
-  <Text>Open new game window.</Text>
+  <Text />
 )
 
 export default ContentClosed
