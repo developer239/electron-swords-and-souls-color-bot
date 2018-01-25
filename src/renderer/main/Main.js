@@ -19,7 +19,7 @@ import ContentOpened from './components/ContentOpened'
 import ContentClosed from './components/ContentClosed'
 
 
-const MODIFIER = 1.5
+const MODIFIER = 1
 
 class Main extends Component {
   constructor() {
@@ -71,7 +71,7 @@ class Main extends Component {
               onClick={isGameWindowOpen
                 ? handleCloseGameWindow
                 : handleOpenGameWindow}
-            >{isGameWindowOpen ? 'Close Game Window' : 'Open Game Window'}</Button>
+            >{isGameWindowOpen ? 'Stop The Bot' : 'Start The Bot'}</Button>
             {
               isGameWindowOpen
                 ? <ContentOpened />

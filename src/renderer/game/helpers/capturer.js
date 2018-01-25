@@ -7,6 +7,8 @@ import {
 } from '../../../_shared/constants'
 
 
+const promisify = (callback) => new Promise(() => callback())
+
 const cv = remote.require('opencv4nodejs')
 
 export const getGameWindowSource = () => new Promise(resolve => {
@@ -55,12 +57,14 @@ export const handleMediaStream = processFrame => MediaStream => {
 }
 
 export const stream = (video, canvas, processFrame) => {
+  console.time('stream')
   canvas.getContext('2d').drawImage(video, 0, 0, GAME_WINDOW_WIDTH, GAME_WINDOW_HEIGHT)
   canvas.toBlob((blob) => {
     toBuffer(blob, (err, buffer) => {
       const mat = cv.imdecode(buffer)
       processFrame(mat)
       stream(video, canvas, processFrame)
+      console.timeEnd('stream')
     })
   })
 }

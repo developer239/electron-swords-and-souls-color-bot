@@ -16,10 +16,6 @@ const createWindow = windowReference => (name, options, special) => {
     x: property(options, 'x'),
     y: property(options, 'y'),
     frame: property(options, 'frame'),
-    webPreferences: {
-      plugins: special && special.webPreferencesPlugins || false,
-      zoomFactor: special && special.webPreferencesZoomFactor || 1,
-    }
   })
 
   newWindow.setResizable(true)
