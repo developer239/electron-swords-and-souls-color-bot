@@ -26,7 +26,7 @@ const Main = ({
         onClick={isGameWindowOpen
           ? handleCloseGameWindow
           : handleOpenGameWindow}
-      >{isGameWindowOpen ? 'Stop [Command + J]' : 'Start [Command + B]'}</Button>
+      >{isGameWindowOpen ? 'Stop' : 'Start'}</Button>
     </Content>
     {
       isGameWindowOpen

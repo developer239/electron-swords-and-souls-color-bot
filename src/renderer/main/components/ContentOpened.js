@@ -4,29 +4,40 @@ import {
   SEND_VIDEO_SCREEN,
   GAME_WINDOW_HEIGHT,
   GAME_WINDOW_WIDTH,
+  ACTIONS,
+  MODIFIER,
 } from '../../../_shared/constants'
 import { listenTo } from '../../_shared/messageHelper'
 import {
   Container,
+  Button,
+  Text,
+  Content,
 } from '../../_shared/components'
 
 
-const MODIFIER = 2
-
+// TODO: Rewrite to recompose
 class ContentOpened extends Component {
+  constructor() {
+    super()
+    this.state = {
+      type: null,
+      isRunning: false,
+      isStreaming: false,
+    }
+  }
+
   componentDidMount() {
     const image = new Image()
 
     listenTo(SEND_VIDEO_SCREEN, (event, args) => {
       this.startFps()
       this.logFps()
-
       const context = this.canvas.getContext('2d')
       image.onload = () => {
         context.drawImage(image, 0, 0, GAME_WINDOW_WIDTH * MODIFIER, GAME_WINDOW_HEIGHT * MODIFIER)
       }
       image.src = `data:image/jpeg;base64,${args.payload}`
-
       this.endFps()
     })
   }
@@ -45,16 +56,47 @@ class ContentOpened extends Component {
     console.log(fps.toFixed(2))
   }
 
+  setType = (name = '') => () => {
+    this.setState({ type: ACTIONS.find(item => item.name === name) })
+  }
+
+  toggleSettings = (key) => () => {
+    const value = !this.state[key]
+    const newState = this.state
+    newState[key] = value
+    this.setState(newState)
+  }
+
   render() {
+    const { type, isStreaming, isRunning } = this.state
     return (
       <Container>
-        <canvas
-          ref={canvas => {
-            this.canvas = canvas
-          }}
-          width={GAME_WINDOW_WIDTH * MODIFIER}
-          height={GAME_WINDOW_HEIGHT * MODIFIER}
-        />
+        <Content>
+          Is running: {isRunning ? 'Yes' : 'No'}
+          <Button onClick={this.toggleSettings('isRunning')}>{isRunning ? 'Stop [COMMAND + J]' : 'Run [COMMAND + B]'}</Button>
+        </Content>
+        <hr />
+        <Content>
+          <Button onClick={this.toggleSettings('isStreaming')}>Toggle Streaming</Button>
+        </Content>
+        <hr />
+        <Content>
+          <Text>{type ? 'Current action: {type.label}' : 'Current action: Bot is idle.'}</Text>
+          {ACTIONS.map((item) => <Button onClick={this.setType(item.name)}>{item.label}</Button>)}
+          <Button onClick={this.setType()}>None</Button>
+        </Content>
+        {isStreaming && (
+          <canvas
+            ref={canvas => {
+              this.canvas = canvas
+            }}
+            width={GAME_WINDOW_WIDTH * MODIFIER}
+            height={GAME_WINDOW_HEIGHT * MODIFIER}
+          />
+        )}
+        {!isStreaming && (
+          <Content><Text> Streaming is off this might improve performance.</Text></Content>
+        )}
       </Container>
     )
   }
