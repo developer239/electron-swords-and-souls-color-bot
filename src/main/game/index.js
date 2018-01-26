@@ -3,13 +3,32 @@ const windowHelper = require('../_shared/windowHelper')
 const messageHelper = require('../_shared/messageHelper')
 
 
+const gameWindow = windowHelper.generateWindowObject()
 const hiddenGameWindow = windowHelper.generateWindowObject()
+
+const createGameWindow = () => windowHelper.createWindow(gameWindow)(
+  null,
+  {
+    x: constants.GAME_WINDOW_WIDTH * 2,
+    y: 0,
+    width: constants.GAME_WINDOW_WIDTH,
+    height: constants.GAME_WINDOW_HEIGHT,
+    frame: false,
+    webPreferences: {
+      plugins: true,
+    }
+  },
+
+  {
+    url: 'http://www.webgames.cz/swords-and-soul/6053-0',
+  },
+)
 
 const createHiddenGameWindow = () => windowHelper.createWindow(hiddenGameWindow)(
   'game',
   {
-    x: 600,
-    y: 205,
+    x: constants.GAME_WINDOW_WIDTH * 2,
+    y: constants.GAME_WINDOW_HEIGHT + 25,
     width: 500,
     height: 550,
     frame: false,
@@ -18,12 +37,14 @@ const createHiddenGameWindow = () => windowHelper.createWindow(hiddenGameWindow)
 
 messageHelper.listenTo(constants.OPEN_GAME_WINDOW, () => {
   if (!hiddenGameWindow.isOpen) {
+    createGameWindow()
     createHiddenGameWindow()
   }
 })
 
 messageHelper.listenTo(constants.CLOSE_GAME_WINDOW, () => {
   if (hiddenGameWindow.isOpen) {
+    gameWindow.window.close()
     hiddenGameWindow.window.close()
   }
 })
@@ -31,4 +52,6 @@ messageHelper.listenTo(constants.CLOSE_GAME_WINDOW, () => {
 module.exports = {
   hiddenGameWindow,
   createHiddenGameWindow,
+  gameWindow,
+  createGameWindow,
 }

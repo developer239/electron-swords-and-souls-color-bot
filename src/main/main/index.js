@@ -17,7 +17,7 @@ const createMainWindow = () => windowHelper.createWindow(mainWindow)(
     x: 0,
     y: 0,
     height: 820,
-    width: 655,
+    width: constants.GAME_WINDOW_WIDTH * 2,
   },
 )
 
@@ -39,6 +39,7 @@ app.on('ready', () => {
   globalShortcut.register('Command+B', () => {
     if (!gameWindow.hiddenGameWindow.isOpen) {
       gameWindow.createHiddenGameWindow()
+      gameWindow.createGameWindow()
       messageHelper.send(mainWindow)(constants.OPEN_GAME_WINDOW)
     }
   })
@@ -46,6 +47,7 @@ app.on('ready', () => {
   globalShortcut.register('Command+J', () => {
     if (gameWindow.hiddenGameWindow.isOpen) {
       gameWindow.hiddenGameWindow.window.close()
+      gameWindow.gameWindow.window.close()
       messageHelper.send(mainWindow)(constants.CLOSE_GAME_WINDOW)
     }
   })

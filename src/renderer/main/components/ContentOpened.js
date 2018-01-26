@@ -11,6 +11,8 @@ import {
 } from '../../_shared/components'
 
 
+const MODIFIER = 2
+
 class ContentOpened extends Component {
   componentDidMount() {
     const image = new Image()
@@ -21,7 +23,7 @@ class ContentOpened extends Component {
 
       const context = this.canvas.getContext('2d')
       image.onload = () => {
-        context.drawImage(image, 0, 0, GAME_WINDOW_WIDTH, GAME_WINDOW_HEIGHT)
+        context.drawImage(image, 0, 0, GAME_WINDOW_WIDTH * MODIFIER, GAME_WINDOW_HEIGHT * MODIFIER)
       }
       image.src = `data:image/jpeg;base64,${args.payload}`
 
@@ -50,8 +52,8 @@ class ContentOpened extends Component {
           ref={canvas => {
             this.canvas = canvas
           }}
-          width={GAME_WINDOW_WIDTH}
-          height={GAME_WINDOW_HEIGHT}
+          width={GAME_WINDOW_WIDTH * MODIFIER}
+          height={GAME_WINDOW_HEIGHT * MODIFIER}
         />
       </Container>
     )
