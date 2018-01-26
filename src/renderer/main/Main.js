@@ -27,12 +27,12 @@ const Main = ({
           ? handleCloseGameWindow
           : handleOpenGameWindow}
       >{isGameWindowOpen ? 'Stop [Command + J]' : 'Start [Command + B]'}</Button>
-      {
-        isGameWindowOpen
-          ? <ContentOpened />
-          : <ContentClosed />
-      }
     </Content>
+    {
+      isGameWindowOpen
+        ? <ContentOpened />
+        : <ContentClosed />
+    }
   </Container>
 )
 
