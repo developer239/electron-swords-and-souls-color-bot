@@ -1,6 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import { TYPES, LOWER_COLORS, UPPER_COLORS, BLUR } from '../../_shared/constants'
+import { TYPES, LOWER_COLORS, UPPER_COLORS, BLUR, SEND_SETTINGS } from '../../_shared/constants'
 import { compose, lifecycle, withState, withHandlers } from 'recompose'
 import {
   Container,
@@ -8,6 +8,7 @@ import {
   Row,
   Column,
 } from '../_shared/components'
+import { listenTo } from '../_shared/messageHelper'
 import { startMediaStream } from './helpers/capturer'
 import { handleFrame } from './helpers/detection'
 
@@ -91,12 +92,18 @@ Game.propTypes = {
   handleLowerColorChange: PropTypes.func.isRequired,
   handleUpperColorChange: PropTypes.func.isRequired,
   handleBlurChange: PropTypes.func.isRequired,
+  setSettings: PropTypes.func.isRequired,
 }
 
 const enhance = compose(
   withState('lowerColor', 'setLowerColor', LOWER_COLORS),
   withState('upperColor', 'setUpperColor', UPPER_COLORS),
   withState('blur', 'setBlur', BLUR),
+  withState('settings', 'setSettings', {
+    type: null,
+    isRunning: false,
+    isStreaming: false,
+  }),
   withHandlers({
     handleLowerColorChange: ({ setLowerColor, lowerColor }) => (type, key) => (event) => {
       lowerColor[type][key] = parseInt(event.target.value, 10)
@@ -116,6 +123,10 @@ const enhance = compose(
     componentDidMount() {
       const handleStreamFrame = this.props.handleStreamFrame
       startMediaStream(handleStreamFrame)
+
+      listenTo(SEND_SETTINGS, (event, args) => {
+        this.props.setSettings(args.payload)
+      })
     },
   }),
 )

@@ -6,8 +6,9 @@ import {
   GAME_WINDOW_WIDTH,
   ACTIONS,
   MODIFIER,
+  SEND_SETTINGS,
 } from '../../../_shared/constants'
-import { listenTo } from '../../_shared/messageHelper'
+import { listenTo, send } from '../../_shared/messageHelper'
 import {
   Container,
   Button,
@@ -57,7 +58,11 @@ class ContentOpened extends Component {
   }
 
   setType = (name = '') => () => {
-    this.setState({ type: ACTIONS.find(item => item.name === name) })
+    const value = ACTIONS.find(item => item.name === name)
+    const newState = this.state
+    newState.type = value
+    this.setState(newState)
+    send(SEND_SETTINGS, newState)
   }
 
   toggleSettings = (key) => () => {
@@ -65,6 +70,7 @@ class ContentOpened extends Component {
     const newState = this.state
     newState[key] = value
     this.setState(newState)
+    send(SEND_SETTINGS, newState)
   }
 
   render() {
@@ -81,7 +87,7 @@ class ContentOpened extends Component {
         </Content>
         <hr />
         <Content>
-          <Text>{type ? 'Current action: {type.label}' : 'Current action: Bot is idle.'}</Text>
+          <Text>{type ? `Current action: ${type.label}` : 'Current action: Bot is idle.'}</Text>
           {ACTIONS.map((item) => <Button onClick={this.setType(item.name)}>{item.label}</Button>)}
           <Button onClick={this.setType()}>None</Button>
         </Content>

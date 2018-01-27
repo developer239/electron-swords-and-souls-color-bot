@@ -49,6 +49,10 @@ messageHelper.listenTo(constants.CLOSE_GAME_WINDOW, () => {
   }
 })
 
+messageHelper.listenTo(constants.SEND_SETTINGS, (event, args) => {
+  messageHelper.send(hiddenGameWindow)(constants.SEND_SETTINGS, args.payload)
+})
+
 module.exports = {
   hiddenGameWindow,
   createHiddenGameWindow,
