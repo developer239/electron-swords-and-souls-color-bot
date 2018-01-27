@@ -2,7 +2,6 @@ const { app, globalShortcut } = require('electron')
 const windowHelper = require('../_shared/windowHelper')
 const messageHelper = require('../_shared/messageHelper')
 const constants = require('../../_shared/constants')
-const gameWindow = require('../game')
 
 
 // We need to keep reference to this object
