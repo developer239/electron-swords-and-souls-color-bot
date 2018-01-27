@@ -1,6 +1,6 @@
 import { send } from '../../_shared/messageHelper'
 import { SEND_VIDEO_SCREEN } from '../../../_shared/constants'
-import { drawMatches } from './bot'
+import { drawMatches, playAttack } from './bot'
 import { remote } from 'electron'
 
 
@@ -11,12 +11,15 @@ export const handleFrame = ({ settings, lowerColor, upperColor, blur }) => (mat,
 
   if (isRunning && type) {
     const matches = drawMatches({ type, lowerColor, upperColor, blur, mat })
-    if (index % 10 === 0) {
+    if (index % 20 === 0) {
       console.log('matches ', matches)
+    }
+    if (type.name === 'attack') {
+      playAttack({ mat, matches })
     }
   }
 
-  if (index % 20 === 0) {
+  if (index % 40 === 0) {
     console.timeEnd('Handle frame')
   }
   console.time('Handle frame')
