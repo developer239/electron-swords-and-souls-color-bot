@@ -28,6 +28,8 @@ const ACTIONS = [
   }
 ]
 const SEND_SETTINGS = ' send-settings'
+const SETTINGS_START_RUNNING = ' settings-start-running'
+const SETTINGS_STOP_RUNNING = ' settings-stop-running'
 
 module.exports = {
   OPEN_GAME_WINDOW,
@@ -44,4 +46,6 @@ module.exports = {
   ACTIONS,
   MODIFIER,
   SEND_SETTINGS,
+  SETTINGS_START_RUNNING,
+  SETTINGS_STOP_RUNNING,
 }

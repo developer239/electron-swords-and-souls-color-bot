@@ -37,18 +37,12 @@ app.on('activate', () => {
 
 app.on('ready', () => {
   globalShortcut.register('Command+B', () => {
-    if (!gameWindow.hiddenGameWindow.isOpen) {
-      gameWindow.createHiddenGameWindow()
-      gameWindow.createGameWindow()
-      messageHelper.send(mainWindow)(constants.OPEN_GAME_WINDOW)
-    }
+    console.log('SETTINGS_START_RUNNING')
+    messageHelper.send(mainWindow)(constants.SETTINGS_START_RUNNING)
   })
 
   globalShortcut.register('Command+J', () => {
-    if (gameWindow.hiddenGameWindow.isOpen) {
-      gameWindow.hiddenGameWindow.window.close()
-      gameWindow.gameWindow.window.close()
-      messageHelper.send(mainWindow)(constants.CLOSE_GAME_WINDOW)
-    }
+    console.log('SETTINGS_STOP_RUNNING')
+    messageHelper.send(mainWindow)(constants.SETTINGS_STOP_RUNNING)
   })
 })

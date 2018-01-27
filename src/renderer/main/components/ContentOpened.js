@@ -7,6 +7,8 @@ import {
   ACTIONS,
   MODIFIER,
   SEND_SETTINGS,
+  SETTINGS_STOP_RUNNING,
+  SETTINGS_START_RUNNING,
 } from '../../../_shared/constants'
 import { listenTo, send } from '../../_shared/messageHelper'
 import {
@@ -40,6 +42,14 @@ class ContentOpened extends Component {
       }
       image.src = `data:image/jpeg;base64,${args.payload}`
       this.endFps()
+    })
+
+    listenTo(SETTINGS_START_RUNNING, () => {
+      this.toggleSettings('isRunning')()
+    })
+
+    listenTo(SETTINGS_STOP_RUNNING, () => {
+      this.toggleSettings('isRunning')()
     })
   }
 
