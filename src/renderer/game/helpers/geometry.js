@@ -24,12 +24,13 @@ export function Rectangle({ x, y }, w, h) {
     }
   }
 
-  this.draw = function (mat) {
+  this.draw = function (mat, color = [255, 0, 0]) {
     drawRectangle(
       mat,
       { x: this.x, y: this.y },
       { x: this.x + this.width, y: this.y + this.height },
-      [255, 0, 0])
+      color
+    )
   }
 }
 

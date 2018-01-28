@@ -1,10 +1,11 @@
 import { send } from '../../_shared/messageHelper'
 import { SEND_VIDEO_SCREEN } from '../../../_shared/constants'
-import { drawMatches, playAttack, playDefence } from './bot'
+import { drawMatches, playAttack, playDefence, playRange } from './bot'
 import { remote } from 'electron'
 
 
 const cv = remote.require('opencv4nodejs')
+
 
 export const handleFrame = ({ settings, lowerColor, upperColor, blur }) => (mat, index) => {
   const { isRunning, isStreaming, type } = settings
@@ -18,6 +19,9 @@ export const handleFrame = ({ settings, lowerColor, upperColor, blur }) => (mat,
     }
     if (type.name === 'defence') {
       playDefence({ mat, matches })
+    }
+    if (type.name === 'range') {
+      playRange({ mat, matches })
     }
   }
 

@@ -1,6 +1,6 @@
 import robot from 'robotjs'
 import { GAME_WINDOW_WIDTH } from '../../../_shared/constants'
-import { getMask } from './image'
+import { getMask, getRegion } from './image'
 import { drawSquareAroundCenter } from './draw'
 import { colorObjectToVector } from './color'
 import { findNonZeroMatches } from './search'
@@ -12,9 +12,10 @@ export const drawMatches = ({ type, mat, lowerColor, upperColor, blur }) => {
   const scale = 3
   const matches = []
 
+  const targetRegion = getRegion(mat, { x: 1, y: 1 }, mat.cols - 50, mat.rows - 50)
   // There should be some more complicated logic what to detect and when to detect
   // so that the bot can do various tasks
-  const rescaledMat = mat.rescale(1 / scale)
+  const rescaledMat = targetRegion.rescale(1 / scale)
 
   type.find.map((type) => {
     const matMasked = getMask(rescaledMat, colorObjectToVector(lowerColor[type]), colorObjectToVector(upperColor[type]), blur[type])
@@ -117,6 +118,41 @@ export const playAttack = ({ mat, matches }) => {
   }
 }
 
+const Timer = function () {
+  this.blackList = []
+  this.size = 70
+  this.ignoreLength = 2000
+
+  this.addToBlackList = function (item, mat) {
+    const rectangle = new Rectangle({ x: item.x - this.size / 2, y: item.y - this.size / 2 }, this.size, this.size)
+    this.blackList.push({
+      item,
+      added: Date.now(),
+      rectangle,
+    })
+  }
+
+  this.isIgnored = function (item) {
+    let isIgnored = false
+
+    this.blackList.forEach(blackListed => {
+      const rectangle = blackListed.rectangle
+      const elapsedTime = Date.now() - blackListed.added
+
+      if (rectangle.isIn({ x: item.x, y: item.y }) && elapsedTime < this.ignoreLength) {
+        isIgnored = true
+      }
+    })
+    return isIgnored
+  }
+
+  this.clearList = function () {
+    this.blackList = this.blackList.filter(blackListed => Date.now() - blackListed.added < this.ignoreLength)
+  }
+}
+
+const timer = new Timer()
+
 export const playDefence = ({ mat, matches }) => {
   robot.setMouseDelay(1)
   const centerTopLeft = { x: 160, y: 110 }
@@ -157,5 +193,31 @@ export const playDefence = ({ mat, matches }) => {
     const targetX = closestApple.x + gameWindowX
     const targetY = closestApple.y + gameWindowY
     robot.moveMouse(targetX, targetY)
+  }
+}
+
+export const playRange = ({ mat, matches }) => {
+  const gameWindowX = GAME_WINDOW_WIDTH * 2
+  const gameWindowY = 25
+
+  if (matches.length) {
+    const whiteListed = []
+    matches.forEach(match => {
+      if (!timer.isIgnored(match)) {
+        whiteListed.push(match)
+      }
+    })
+
+    if (whiteListed.length) {
+      // const shuffled = shuffle(matches)
+      const rangeTarget = whiteListed[0]
+      const targetX = rangeTarget.x + gameWindowX - 5
+      const targetY = rangeTarget.y + gameWindowY - 5
+      robot.mouseToggle('down', 'left')
+      robot.moveMouse(targetX, targetY)
+      robot.mouseToggle('up', 'left')
+      timer.addToBlackList(rangeTarget, mat)
+      timer.clearList()
+    }
   }
 }
