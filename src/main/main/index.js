@@ -7,8 +7,8 @@ const windows = require('./windows')
 
 const mainWindow = windowHelper.generateWindowObject()
 
-messageHelper.listenTo(constants.SEND_VIDEO_SCREEN, (event, args) => {
-  messageHelper.send(mainWindow)(constants.SEND_VIDEO_SCREEN, args.payload)
+messageHelper.listenTo(constants.IPC_SEND_VIDEO_SCREEN, (event, args) => {
+  messageHelper.send(mainWindow)(constants.IPC_SEND_VIDEO_SCREEN, args.payload)
 })
 
 app.commandLine.appendSwitch('ppapi-flash-path', app.getPath('pepperFlashSystemPlugin'))
@@ -17,7 +17,7 @@ app.commandLine.appendSwitch('ppapi-flash-version', '28.0.0.137')
 app.on('ready', () => {
   windows.createMainWindow(mainWindow)
   globalShortcut.register('Command+B', () => {
-    messageHelper.send(mainWindow)(constants.SETTINGS_START_RUNNING)
+    messageHelper.send(mainWindow)(constants.IPC_SEND_IS_RUNNING)
   })
 })
 

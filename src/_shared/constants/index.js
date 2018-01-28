@@ -1,3 +1,7 @@
+//
+// Windows
+//
+
 // GAME WINDOW is window with swords and souls game
 const GAME_WINDOW_WIDTH = 350
 const GAME_WINDOW_HEIGHT = 275
@@ -17,6 +21,19 @@ const MAIN_WINDOW_HEIGHT = 820
 
 // GENERAL OS OFFSETS
 const TOP_OFFSET = 25
+
+//
+// IPC
+//
+
+// Constants for IPC communication
+const IPC_SEND_VIDEO_SCREEN = 'send-video-screen'
+const IPC_SEND_SETTINGS = ' send-settings'
+const IPC_SEND_IS_RUNNING = ' settings-start-running'
+
+//
+// BOT
+//
 
 const TYPES = ['apple', 'star', 'range']
 const LOWER_COLORS = {
@@ -49,27 +66,22 @@ const ACTIONS = [
   },
 ]
 
-// Constants for communication between main / render processes
-const SEND_VIDEO_SCREEN = 'send-video-screen'
-const SEND_SETTINGS = ' send-settings'
-const SETTINGS_START_RUNNING = ' settings-start-running'
-
 module.exports = {
-  GAME_WINDOW_URL,
-  GAME_WINDOW_NAME,
   GAME_WINDOW_WIDTH,
   GAME_WINDOW_HEIGHT,
-  SEND_VIDEO_SCREEN,
-  TYPES,
-  LOWER_COLORS,
-  UPPER_COLORS,
-  BLUR,
-  ACTIONS,
-  SEND_SETTINGS,
-  SETTINGS_START_RUNNING,
+  GAME_WINDOW_URL,
+  GAME_WINDOW_NAME,
   GAME_WINDOW_DISPLAY_WIDTH,
   GAME_WINDOW_DISPLAY_HEIGHT,
   MAIN_WINDOW_WIDTH,
   MAIN_WINDOW_HEIGHT,
   TOP_OFFSET,
+  IPC_SEND_VIDEO_SCREEN,
+  IPC_SEND_SETTINGS,
+  IPC_SEND_IS_RUNNING,
+  TYPES,
+  LOWER_COLORS,
+  UPPER_COLORS,
+  BLUR,
+  ACTIONS,
 }

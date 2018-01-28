@@ -1,9 +1,9 @@
 import React, { Component } from 'react'
 import {
-  SEND_VIDEO_SCREEN,
+  IPC_SEND_VIDEO_SCREEN,
   ACTIONS,
-  SEND_SETTINGS,
-  SETTINGS_START_RUNNING,
+  IPC_SEND_SETTINGS,
+  IPC_SEND_IS_RUNNING,
   GAME_WINDOW_DISPLAY_WIDTH,
   GAME_WINDOW_DISPLAY_HEIGHT,
 } from '../../_shared/constants'
@@ -34,7 +34,7 @@ class Main extends Component {
   componentDidMount() {
     const image = new Image()
 
-    listenTo(SEND_VIDEO_SCREEN, (event, args) => {
+    listenTo(IPC_SEND_VIDEO_SCREEN, (event, args) => {
       this.startFps()
       this.logFps()
       const context = this.canvas.getContext('2d')
@@ -45,7 +45,7 @@ class Main extends Component {
       this.endFps()
     })
 
-    listenTo(SETTINGS_START_RUNNING, () => {
+    listenTo(IPC_SEND_IS_RUNNING, () => {
       this.toggleSettings('isRunning')()
     })
   }
@@ -69,7 +69,7 @@ class Main extends Component {
     const newState = this.state
     newState.type = value
     this.setState(newState)
-    send(SEND_SETTINGS, newState)
+    send(IPC_SEND_SETTINGS, newState)
   }
 
   toggleSettings = (key) => () => {
@@ -77,7 +77,7 @@ class Main extends Component {
     const newState = this.state
     newState[key] = value
     this.setState(newState)
-    send(SEND_SETTINGS, newState)
+    send(IPC_SEND_SETTINGS, newState)
   }
 
   render() {

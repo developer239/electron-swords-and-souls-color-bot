@@ -8,8 +8,8 @@ const windows = require('./windows')
 const gameWindow = windowHelper.generateWindowObject()
 const hiddenGameWindow = windowHelper.generateWindowObject()
 
-messageHelper.listenTo(constants.SEND_SETTINGS, (event, args) => {
-  messageHelper.send(hiddenGameWindow)(constants.SEND_SETTINGS, args.payload)
+messageHelper.listenTo(constants.IPC_SEND_SETTINGS, (event, args) => {
+  messageHelper.send(hiddenGameWindow)(constants.IPC_SEND_SETTINGS, args.payload)
 })
 
 app.on('ready', () => {

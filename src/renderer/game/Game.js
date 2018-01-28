@@ -1,6 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import { TYPES, LOWER_COLORS, UPPER_COLORS, BLUR, SEND_SETTINGS } from '../../_shared/constants'
+import { TYPES, LOWER_COLORS, UPPER_COLORS, BLUR, IPC_SEND_SETTINGS } from '../../_shared/constants'
 import { compose, lifecycle, withState, withHandlers } from 'recompose'
 import {
   Container,
@@ -124,7 +124,7 @@ const enhance = compose(
       const handleStreamFrame = this.props.handleStreamFrame
       startMediaStream(handleStreamFrame)
 
-      listenTo(SEND_SETTINGS, (event, args) => {
+      listenTo(IPC_SEND_SETTINGS, (event, args) => {
         this.props.setSettings(args.payload)
       })
     },
