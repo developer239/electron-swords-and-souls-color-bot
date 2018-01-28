@@ -25,10 +25,6 @@ const createWindow = windowReference => (name, options, special) => {
     newWindow.once('ready-to-show', newWindow.show)
   }
 
-  if (special && special.touchBar) {
-    newWindow.setTouchBar(special.touchBar)
-  }
-
   // Handle close window
   newWindow.on('closed', () => {
     windowReference.isOpen = false
