@@ -7,7 +7,7 @@ import {
   GAME_WINDOW_DISPLAY_WIDTH,
   GAME_WINDOW_DISPLAY_HEIGHT,
 } from '../../_shared/constants'
-import { send, listenTo } from '../_shared/messageHelper'
+import { send, listenTo } from '../_shared/helpers/message'
 import {
   Button,
   Pane,
@@ -17,7 +17,7 @@ import {
   StatusText,
   Window,
   WindowContent,
-} from './newComponents'
+} from '../_shared/components/index'
 
 
 class Main extends Component {
@@ -35,14 +35,16 @@ class Main extends Component {
     const image = new Image()
 
     listenTo(IPC_SEND_VIDEO_SCREEN, (event, args) => {
-      this.startFps()
-      this.logFps()
-      const context = this.canvas.getContext('2d')
-      image.onload = () => {
-        context.drawImage(image, 0, 0, GAME_WINDOW_DISPLAY_WIDTH, GAME_WINDOW_DISPLAY_HEIGHT)
+      if (this.canvas) {
+        this.startFps()
+        this.logFps()
+        const context = this.canvas.getContext('2d')
+        image.onload = () => {
+          context.drawImage(image, 0, 0, GAME_WINDOW_DISPLAY_WIDTH, GAME_WINDOW_DISPLAY_HEIGHT)
+        }
+        image.src = `data:image/jpeg;base64,${args.payload}`
+        this.endFps()
       }
-      image.src = `data:image/jpeg;base64,${args.payload}`
-      this.endFps()
     })
 
     listenTo(IPC_SEND_IS_RUNNING, () => {
@@ -127,7 +129,9 @@ class Main extends Component {
                   height={GAME_WINDOW_DISPLAY_HEIGHT}
                 />
               )}
-              {!isStreaming && (<div>Window streaming is currently turned is off. Detection performance might work better as a result.</div>)}
+              {!isStreaming && (
+                <div>Window streaming is currently turned is off. Detection performance might work better as a
+                  result.</div>)}
             </Pane>
           </PaneGroup>
         </WindowContent>

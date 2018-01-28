@@ -1,24 +1,22 @@
 import Button from './Button'
-import Container from './Container'
-import Content from './Content'
-import Header from './Header'
-import Input from './Input'
-import SubHeader from './SubHeader'
-import Text from './Text'
-import Value from './Value'
-import Row from './Row'
-import Column from './Column'
+import Divider from './Divider'
+import Pane from './Pane'
+import PaneGroup from './PaneGroup'
+import PaneSidebar from './PaneSidebar'
+import StatusText from './StatusText'
+import PaneSidebarGroup from './PaneSidebarGroup'
+import Window from './Window'
+import WindowContent from './WindowContent'
 
 
 export {
   Button,
-  Container,
-  Content,
-  Header,
-  Input,
-  SubHeader,
-  Text,
-  Value,
-  Row,
-  Column,
+  Divider,
+  Pane,
+  PaneGroup,
+  PaneSidebar,
+  PaneSidebarGroup,
+  StatusText,
+  Window,
+  WindowContent,
 }

@@ -1,4 +1,5 @@
 import React from 'react'
+import PropTypes from 'prop-types'
 import styled from 'styled-components'
 
 
@@ -11,5 +12,9 @@ const StatusText = ({ value }) => (
     Status: <strong>{value}</strong>
   </StyledDiv>
 )
+
+StatusText.propTypes = {
+  value: PropTypes.string,
+}
 
 export default StatusText

@@ -1,4 +1,5 @@
 import React from 'react'
+import PropTypes from 'prop-types'
 
 
 const WindowContent = ({ children }) => (
@@ -6,5 +7,9 @@ const WindowContent = ({ children }) => (
     {children}
   </div>
 )
+
+WindowContent.propTypes = {
+  children: PropTypes.node,
+}
 
 export default WindowContent

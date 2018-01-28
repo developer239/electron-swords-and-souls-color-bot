@@ -35,19 +35,21 @@ const IPC_SEND_IS_RUNNING = ' settings-start-running'
 // BOT
 //
 
-const TYPES = ['apple', 'star', 'range']
-const LOWER_COLORS = {
+const TYPES = ['apple', 'star', 'range'] // objects to detect
+
+const TYPES_LOWER_COLORS = {
   apple: { b: 10, g: 10, r: 130 },
   star: { b: 0, g: 100, r: 210 },
   range: { b: 230, g: 230, r: 230 },
 }
-const UPPER_COLORS = {
+const TYPES_UPPER_COLORS = {
   apple: { b: 200, g: 65, r: 255 },
   star: { b: 130, g: 255, r: 255 },
   range: { b: 255, g: 255, r: 255 },
 }
-const BLUR = { apple: 2, star: 2, range: 2 }
+const TYPES_BLUR = { apple: 2, star: 2, range: 2 }
 
+// Actions to execute
 const ACTIONS = [
   {
     label: 'Attack',
@@ -80,8 +82,8 @@ module.exports = {
   IPC_SEND_SETTINGS,
   IPC_SEND_IS_RUNNING,
   TYPES,
-  LOWER_COLORS,
-  UPPER_COLORS,
-  BLUR,
+  TYPES_LOWER_COLORS,
+  TYPES_UPPER_COLORS,
+  TYPES_BLUR,
   ACTIONS,
 }

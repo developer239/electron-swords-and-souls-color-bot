@@ -1,7 +1,6 @@
 import robot from 'robotjs'
 import {
   MAIN_WINDOW_WIDTH,
-  MAIN_WINDOW_HEIGHT,
   TOP_OFFSET,
 } from '../../../_shared/constants'
 import { getMask, getRegion } from './image'
@@ -9,7 +8,6 @@ import { drawSquareAroundCenter } from './draw'
 import { colorObjectToVector } from './color'
 import { findNonZeroMatches } from './search'
 import { Rectangle, pointsDiff } from './geometry'
-import { shuffle } from './array'
 
 
 export const drawMatches = ({ type, mat, lowerColor, upperColor, blur }) => {

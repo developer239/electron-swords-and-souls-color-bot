@@ -1,24 +1,18 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import { TYPES, LOWER_COLORS, UPPER_COLORS, BLUR, IPC_SEND_SETTINGS } from '../../_shared/constants'
+import { TYPES, TYPES_LOWER_COLORS, TYPES_UPPER_COLORS, TYPES_BLUR, IPC_SEND_SETTINGS } from '../../_shared/constants'
 import { compose, lifecycle, withState, withHandlers } from 'recompose'
-import {
-  Container,
-  Content,
-  Row,
-  Column,
-} from '../_shared/components'
-import { listenTo } from '../_shared/messageHelper'
+import { listenTo } from '../_shared/helpers/message'
 import { startMediaStream } from './helpers/capturer'
 import { handleFrame } from './helpers/detection'
 
 
 const Game = ({ handleLowerColorChange, lowerColor, handleUpperColorChange, upperColor, blur, handleBlurChange }) => (
-  <Container>
-    <Content>
-      <Row>
+  <div>
+    <div>
+      <div>
         {TYPES.map((type, index) => (
-          <Column key={`${type}-${index}`}>
+          <div key={`${type}-${index}`}>
             {/* LOWER COLOR */}
             <h3>{type}</h3>
             Lower Color: <br />
@@ -78,11 +72,11 @@ const Game = ({ handleLowerColorChange, lowerColor, handleUpperColorChange, uppe
             min={1}
             max={100}
           />{blur[type]}
-          </Column>
+          </div>
         ))}
-      </Row>
-    </Content>
-  </Container>
+      </div>
+    </div>
+  </div>
 )
 
 Game.propTypes = {
@@ -96,9 +90,9 @@ Game.propTypes = {
 }
 
 const enhance = compose(
-  withState('lowerColor', 'setLowerColor', LOWER_COLORS),
-  withState('upperColor', 'setUpperColor', UPPER_COLORS),
-  withState('blur', 'setBlur', BLUR),
+  withState('lowerColor', 'setLowerColor', TYPES_LOWER_COLORS),
+  withState('upperColor', 'setUpperColor', TYPES_UPPER_COLORS),
+  withState('blur', 'setBlur', TYPES_BLUR),
   withState('settings', 'setSettings', {
     type: null,
     isRunning: false,

@@ -1,4 +1,5 @@
 import React from 'react'
+import PropTypes from 'prop-types'
 
 
 const PaneGroup = ({ children }) => (
@@ -6,5 +7,9 @@ const PaneGroup = ({ children }) => (
     {children}
   </div>
 )
+
+PaneGroup.propTypes = {
+  children: PropTypes.node,
+}
 
 export default PaneGroup

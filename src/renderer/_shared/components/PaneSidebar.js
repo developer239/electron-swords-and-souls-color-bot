@@ -1,4 +1,5 @@
 import React from 'react'
+import PropTypes from 'prop-types'
 
 
 const PaneSidebar = ({ children }) => (
@@ -6,5 +7,9 @@ const PaneSidebar = ({ children }) => (
     {children}
   </div>
 )
+
+PaneSidebar.propTypes = {
+  children: PropTypes.node,
+}
 
 export default PaneSidebar

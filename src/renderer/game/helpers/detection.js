@@ -1,4 +1,4 @@
-import { send } from '../../_shared/messageHelper'
+import { send } from '../../_shared/helpers/message'
 import { IPC_SEND_VIDEO_SCREEN } from '../../../_shared/constants'
 import { drawMatches, playAttack, playDefence, playRange } from './bot'
 import { remote } from 'electron'
@@ -25,15 +25,7 @@ export const handleFrame = ({ settings, lowerColor, upperColor, blur }) => (mat,
     }
   }
 
-  if (index % 40 === 0) {
-    console.timeEnd('Handle frame')
-  }
-  console.time('Handle frame')
-
   if (isStreaming) {
-    if (index % 20 === 0) {
-      console.log('Sending Frame')
-    }
     const base64 = cv.imencode('.jpg', mat).toString('base64')
     send(IPC_SEND_VIDEO_SCREEN, base64)
   }
