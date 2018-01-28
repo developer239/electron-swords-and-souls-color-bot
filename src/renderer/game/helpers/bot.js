@@ -1,9 +1,10 @@
 import robot from 'robotjs'
+import { GAME_WINDOW_WIDTH } from '../../../_shared/constants'
 import { getMask } from './image'
 import { drawSquareAroundCenter } from './draw'
 import { colorObjectToVector } from './color'
 import { findNonZeroMatches } from './search'
-import { Rectangle } from './geometry'
+import { Rectangle, pointsDiff } from './geometry'
 import { shuffle } from './array'
 
 
@@ -102,5 +103,49 @@ export const playAttack = ({ mat, matches }) => {
       const shuffledApples = shuffle(apples)
       robot.keyTap(shuffledApples[0].area.key)
     }
+  }
+}
+
+export const playDefence = ({ mat, matches }) => {
+  robot.setMouseDelay(1)
+  const centerTopLeft = { x: 160, y: 110 }
+  const centerWidth = 35
+  const centerHeight = 55
+  const areas = [
+    {
+      rectangle: new Rectangle(centerTopLeft, centerWidth, centerHeight),
+      name: 'center',
+    },
+  ]
+
+  const centerPoint = {
+    x: centerTopLeft.x + (centerWidth / 2),
+    y: centerTopLeft.y + (centerHeight / 2),
+  }
+
+  // Draw helper rectangles
+  areas.forEach(area => area.rectangle.draw(mat))
+
+  const distances = []
+  matches.forEach((match, index) => {
+    const distance = pointsDiff(centerPoint, match)
+    if (distance > 10) {
+      console.log(distance)
+      distances[index] = distance
+    }
+  })
+
+  const indexOfSmallestMatch = distances.indexOf(Math.min.apply(null, distances))
+  const closestApple = matches[indexOfSmallestMatch]
+
+  const gameWindowX = GAME_WINDOW_WIDTH * 2
+  const gameWindowY = 25
+
+  // robot.moveMouseSmooth(gameWindowX, gameWindowY)
+
+  if (closestApple) {
+    const targetX = closestApple.x + gameWindowX
+    const targetY = closestApple.y + gameWindowY
+    robot.moveMouse(targetX, targetY)
   }
 }

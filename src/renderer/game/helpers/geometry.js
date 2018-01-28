@@ -32,3 +32,9 @@ export function Rectangle({ x, y }, w, h) {
       [255, 0, 0])
   }
 }
+
+export function pointsDiff(firstPoint, secondPoint) {
+  const a = firstPoint.x - secondPoint.x
+  const b = firstPoint.y - secondPoint.y
+  return Math.sqrt(a * a + b * b)
+}

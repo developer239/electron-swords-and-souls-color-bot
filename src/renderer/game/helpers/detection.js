@@ -1,6 +1,6 @@
 import { send } from '../../_shared/messageHelper'
 import { SEND_VIDEO_SCREEN } from '../../../_shared/constants'
-import { drawMatches, playAttack } from './bot'
+import { drawMatches, playAttack, playDefence } from './bot'
 import { remote } from 'electron'
 
 
@@ -16,6 +16,9 @@ export const handleFrame = ({ settings, lowerColor, upperColor, blur }) => (mat,
     }
     if (type.name === 'attack') {
       playAttack({ mat, matches })
+    }
+    if (type.name === 'defence') {
+      playDefence({ mat, matches })
     }
   }
 

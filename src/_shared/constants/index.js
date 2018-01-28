@@ -24,7 +24,7 @@ const ACTIONS = [
   {
     label: 'Defence',
     name: 'defence',
-    find: TYPES,
+    find: ['apple'],
   }
 ]
 const SEND_SETTINGS = ' send-settings'
