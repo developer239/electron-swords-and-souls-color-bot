@@ -215,7 +215,7 @@ export const playRange = ({ mat, matches }) => {
       const targetY = rangeTarget.y + gameWindowY - 5
       robot.mouseToggle('down', 'left')
       robot.moveMouse(targetX, targetY)
-      robot.mouseToggle('up', 'left')
+      robot.mouseClick('left')
       timer.addToBlackList(rangeTarget, mat)
       timer.clearList()
     }
