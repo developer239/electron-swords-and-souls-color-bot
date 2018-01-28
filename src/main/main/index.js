@@ -36,12 +36,6 @@ app.on('activate', () => {
 
 app.on('ready', () => {
   globalShortcut.register('Command+B', () => {
-    console.log('SETTINGS_START_RUNNING')
     messageHelper.send(mainWindow)(constants.SETTINGS_START_RUNNING)
-  })
-
-  globalShortcut.register('Command+J', () => {
-    console.log('SETTINGS_STOP_RUNNING')
-    messageHelper.send(mainWindow)(constants.SETTINGS_STOP_RUNNING)
   })
 })

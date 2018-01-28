@@ -6,7 +6,6 @@ import {
   ACTIONS,
   MODIFIER,
   SEND_SETTINGS,
-  SETTINGS_STOP_RUNNING,
   SETTINGS_START_RUNNING,
 } from '../../_shared/constants'
 import { send, listenTo } from '../_shared/messageHelper'
@@ -48,10 +47,6 @@ class Main extends Component {
     })
 
     listenTo(SETTINGS_START_RUNNING, () => {
-      this.toggleSettings('isRunning')()
-    })
-
-    listenTo(SETTINGS_STOP_RUNNING, () => {
       this.toggleSettings('isRunning')()
     })
   }

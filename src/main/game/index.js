@@ -36,13 +36,11 @@ const createHiddenGameWindow = () => windowHelper.createWindow(hiddenGameWindow)
   },
 )
 
-// Create main window when application is ready
 app.on('ready', () => {
   createGameWindow()
   createHiddenGameWindow()
 })
 
-// Create main window when application is not active anymore
 app.on('activate', () => {
   if (!gameWindow.isOpen) {
     createGameWindow()
@@ -52,27 +50,11 @@ app.on('activate', () => {
   }
 })
 
-messageHelper.listenTo(constants.OPEN_GAME_WINDOW, () => {
-  if (!hiddenGameWindow.isOpen) {
-    createGameWindow()
-    createHiddenGameWindow()
-  }
-})
-
-messageHelper.listenTo(constants.CLOSE_GAME_WINDOW, () => {
-  if (hiddenGameWindow.isOpen) {
-    gameWindow.window.close()
-    hiddenGameWindow.window.close()
-  }
-})
-
 messageHelper.listenTo(constants.SEND_SETTINGS, (event, args) => {
   messageHelper.send(hiddenGameWindow)(constants.SEND_SETTINGS, args.payload)
 })
 
 module.exports = {
   hiddenGameWindow,
-  createHiddenGameWindow,
   gameWindow,
-  createGameWindow,
 }

@@ -1,7 +1,3 @@
-const OPEN_GAME_WINDOW = 'open-game-window'
-const CLOSE_GAME_WINDOW = 'close-game-window'
-const GAME_WINDOW_OPENED = 'game-window-opened'
-
 const GAME_WINDOW_WIDTH = 350
 const GAME_WINDOW_HEIGHT = 275
 const MODIFIER = 2
@@ -42,12 +38,8 @@ const ACTIONS = [
 ]
 const SEND_SETTINGS = ' send-settings'
 const SETTINGS_START_RUNNING = ' settings-start-running'
-const SETTINGS_STOP_RUNNING = ' settings-stop-running'
 
 module.exports = {
-  OPEN_GAME_WINDOW,
-  CLOSE_GAME_WINDOW,
-  GAME_WINDOW_OPENED,
   GAME_WINDOW_NAME,
   GAME_WINDOW_WIDTH,
   GAME_WINDOW_HEIGHT,
@@ -60,5 +52,4 @@ module.exports = {
   MODIFIER,
   SEND_SETTINGS,
   SETTINGS_START_RUNNING,
-  SETTINGS_STOP_RUNNING,
 }
