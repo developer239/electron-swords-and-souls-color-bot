@@ -19,7 +19,7 @@ const createWindow = windowReference => (name, options, special) => {
     webPreferences: property(options, 'webPreferences'),
   })
 
-  newWindow.setResizable(true)
+  newWindow.setResizable(false)
   newWindow.loadURL(name ? `file://${__dirname}/../../renderer/${name}/index.html` : special.url)
   if (options && (options.show === undefined || options.show)) {
     newWindow.once('ready-to-show', newWindow.show)
