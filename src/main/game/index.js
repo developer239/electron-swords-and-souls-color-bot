@@ -1,3 +1,4 @@
+const { app } = require('electron')
 const constants = require('../../_shared/constants')
 const windowHelper = require('../_shared/windowHelper')
 const messageHelper = require('../_shared/messageHelper')
@@ -9,7 +10,7 @@ const hiddenGameWindow = windowHelper.generateWindowObject()
 const createGameWindow = () => windowHelper.createWindow(gameWindow)(
   null,
   {
-    x: constants.GAME_WINDOW_WIDTH * 2,
+    x: constants.GAME_WINDOW_WIDTH * 2 + 184,
     y: 0,
     width: constants.GAME_WINDOW_WIDTH,
     height: constants.GAME_WINDOW_HEIGHT,
@@ -27,13 +28,29 @@ const createGameWindow = () => windowHelper.createWindow(gameWindow)(
 const createHiddenGameWindow = () => windowHelper.createWindow(hiddenGameWindow)(
   'game',
   {
-    x: constants.GAME_WINDOW_WIDTH * 2,
+    x: constants.GAME_WINDOW_WIDTH * 2 + 184,
     y: constants.GAME_WINDOW_HEIGHT + 25,
     width: 500,
     height: 550,
     frame: false,
   },
 )
+
+// Create main window when application is ready
+app.on('ready', () => {
+  createGameWindow()
+  createHiddenGameWindow()
+})
+
+// Create main window when application is not active anymore
+app.on('activate', () => {
+  if (!gameWindow.isOpen) {
+    createGameWindow()
+  }
+  if (!hiddenGameWindow.isOpen) {
+    createHiddenGameWindow()
+  }
+})
 
 messageHelper.listenTo(constants.OPEN_GAME_WINDOW, () => {
   if (!hiddenGameWindow.isOpen) {

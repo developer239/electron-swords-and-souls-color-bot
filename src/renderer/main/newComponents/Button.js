@@ -9,8 +9,8 @@ const StyledButton = styled.button`
   display: block;
 `
 
-const Button = ({ children }) => (
-  <StyledButton className="btn btn-large btn-default">
+const Button = ({ children, isActive, onClick }) => (
+  <StyledButton onClick={onClick} className={`btn btn-large btn-default ${isActive ? 'active' : ''}`}>
     {children}
   </StyledButton>
 )

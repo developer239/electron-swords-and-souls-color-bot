@@ -1,10 +1,15 @@
 import React from 'react'
+import styled from 'styled-components'
 
+
+const StyledComponents = styled.div`
+  padding: 1rem;
+`
 
 const Pane = ({ children }) => (
-  <div className="pane">
+  <StyledComponents className="pane">
     {children}
-  </div>
+  </StyledComponents>
 )
 
 export default Pane

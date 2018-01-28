@@ -21,7 +21,9 @@ const createWindow = windowReference => (name, options, special) => {
 
   newWindow.setResizable(true)
   newWindow.loadURL(name ? `file://${__dirname}/../../renderer/${name}/index.html` : special.url)
-  newWindow.once('ready-to-show', newWindow.show)
+  if (options && (options.show === undefined || options.show)) {
+    newWindow.once('ready-to-show', newWindow.show)
+  }
 
   if (special && special.touchBar) {
     newWindow.setTouchBar(special.touchBar)

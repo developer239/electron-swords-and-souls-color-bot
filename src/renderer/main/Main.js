@@ -1,9 +1,13 @@
 import React, { Component } from 'react'
-import PropTypes from 'prop-types'
-import { compose, withHandlers, withState, lifecycle } from 'recompose'
 import {
-  OPEN_GAME_WINDOW,
-  CLOSE_GAME_WINDOW,
+  SEND_VIDEO_SCREEN,
+  GAME_WINDOW_HEIGHT,
+  GAME_WINDOW_WIDTH,
+  ACTIONS,
+  MODIFIER,
+  SEND_SETTINGS,
+  SETTINGS_STOP_RUNNING,
+  SETTINGS_START_RUNNING,
 } from '../../_shared/constants'
 import { send, listenTo } from '../_shared/messageHelper'
 import {
@@ -19,13 +23,75 @@ import {
 
 
 class Main extends Component {
+  constructor() {
+    super()
+
+    this.state = {
+      type: null,
+      isRunning: false,
+      isStreaming: false,
+    }
+  }
+
+  componentDidMount() {
+    const image = new Image()
+
+    listenTo(SEND_VIDEO_SCREEN, (event, args) => {
+      this.startFps()
+      this.logFps()
+      const context = this.canvas.getContext('2d')
+      image.onload = () => {
+        context.drawImage(image, 0, 0, GAME_WINDOW_WIDTH * MODIFIER, GAME_WINDOW_HEIGHT * MODIFIER)
+      }
+      image.src = `data:image/jpeg;base64,${args.payload}`
+      this.endFps()
+    })
+
+    listenTo(SETTINGS_START_RUNNING, () => {
+      this.toggleSettings('isRunning')()
+    })
+
+    listenTo(SETTINGS_STOP_RUNNING, () => {
+      this.toggleSettings('isRunning')()
+    })
+  }
+
+  startFps() {
+    this.now = Date.now() / 1000
+  }
+
+  endFps() {
+    this.then = Date.now() / 1000
+  }
+
+  logFps() {
+    const elapsedTime = this.now - this.then
+    const fps = 1 / elapsedTime
+    console.log(fps.toFixed(2))
+  }
+
+  setType = (name = '') => () => {
+    const value = ACTIONS.find(item => item.name === name)
+    const newState = this.state
+    newState.type = value
+    this.setState(newState)
+    send(SEND_SETTINGS, newState)
+  }
+
+  toggleSettings = (key) => () => {
+    const value = !this.state[key]
+    const newState = this.state
+    newState[key] = value
+    this.setState(newState)
+    send(SEND_SETTINGS, newState)
+  }
 
   render() {
     const {
-      isGameWindowOpen,
-      handleOpenGameWindow,
-      handleCloseGameWindow,
-    } = this.props
+      type,
+      isStreaming,
+      isRunning,
+    } = this.state
 
     return (
       <Window>
@@ -33,24 +99,42 @@ class Main extends Component {
           <PaneGroup>
             <PaneSidebar>
               <PaneSidebarGroup shouldShowDivider>
-                <Button>
-                  Start [⌘ + B]
+                <Button isActive={isRunning} onClick={this.toggleSettings('isRunning')}>
+                  {isRunning ? 'Stop [⌘ + B]' : 'Start [⌘ + B]'}
                 </Button>
-                <StatusText value="On" />
+                <StatusText value={isRunning ? 'ON' : 'OFF'} />
               </PaneSidebarGroup>
               <PaneSidebarGroup shouldShowDivider>
-                <Button>Stream Video</Button>
-                <StatusText value="On" />
+                <Button
+                  isActive={isStreaming}
+                  onClick={this.toggleSettings('isStreaming')}
+                >{isStreaming ? 'Stop Stream' : 'Stream Video'}</Button>
+                <StatusText value={isStreaming ? 'ON' : 'OFF'} />
               </PaneSidebarGroup>
               <PaneSidebarGroup>
-                <Button>Strength</Button>
-                <Button>Block</Button>
-                <Button>Ranged</Button>
-                <Button>None</Button>
-                <StatusText value="Strength" />
+                {ACTIONS.map((item, index) => (
+                  <Button
+                    key={index}
+                    isActive={type && type.name === item.name}
+                    onClick={this.setType(item.name)}
+                  >{item.label}</Button>
+                ))}
+                <Button onClick={this.setType()} isActive={!type}>None</Button>
+                <StatusText value={type ? type.label : 'NONE'} />
               </PaneSidebarGroup>
             </PaneSidebar>
-            <Pane />
+            <Pane>
+              {isStreaming && (
+                <canvas
+                  ref={canvas => {
+                    this.canvas = canvas
+                  }}
+                  width={GAME_WINDOW_WIDTH * MODIFIER}
+                  height={GAME_WINDOW_HEIGHT * MODIFIER}
+                />
+              )}
+              {!isStreaming && (<div>Window streaming is currently turned is off. Detection performance might work better as a result.</div>)}
+            </Pane>
           </PaneGroup>
         </WindowContent>
       </Window>
@@ -58,36 +142,6 @@ class Main extends Component {
   }
 }
 
-Main.propTypes = {
-  handleOpenGameWindow: PropTypes.func.isRequired,
-  handleCloseGameWindow: PropTypes.func.isRequired,
-  isGameWindowOpen: PropTypes.bool.isRequired,
-  setOpenGameWindow: PropTypes.func.isRequired,
-}
+Main.propTypes = {}
 
-const enhance = compose(
-  withState('isGameWindowOpen', 'setOpenGameWindow', false),
-  withHandlers({
-    handleOpenGameWindow: ({ setOpenGameWindow }) => () => {
-      setOpenGameWindow(true)
-      send(OPEN_GAME_WINDOW)
-    },
-    handleCloseGameWindow: ({ setOpenGameWindow }) => () => {
-      setOpenGameWindow(false)
-      send(CLOSE_GAME_WINDOW)
-    },
-  }),
-  lifecycle({
-    componentDidMount() {
-      listenTo(OPEN_GAME_WINDOW, () => {
-        this.props.setOpenGameWindow(true)
-      })
-
-      listenTo(CLOSE_GAME_WINDOW, () => {
-        this.props.setOpenGameWindow(false)
-      })
-    },
-  }),
-)
-
-export default enhance(Main)
+export default Main
