@@ -40,7 +40,7 @@ export const drawMatches = ({ type, mat, lowerColor, upperColor, blur }) => {
 }
 
 export const playAttack = ({ mat, matches }) => {
-  robot.setKeyboardDelay(30)
+  robot.setKeyboardDelay(40)
 
   const areas = [
     {
@@ -53,7 +53,7 @@ export const playAttack = ({ mat, matches }) => {
       key: 'up',
     },
     {
-      rectangle: new Rectangle({ x: 78, y: 145 }, 72, 25),
+      rectangle: new Rectangle({ x: 78, y: 145 }, 92, 25),
       name: 'appleMid',
       key: 'right',
     },
