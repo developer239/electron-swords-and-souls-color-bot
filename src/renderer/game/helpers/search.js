@@ -1,4 +1,4 @@
-export const findNonZeroMatches = (matrix, neighbourSize = 3) => {
+export const findNonZeroMatches = (matrix, neighbourSize = 12) => {
   const matches = []
   const nonZeroMatches = matrix.findNonZero()
 

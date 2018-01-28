@@ -1,6 +1,6 @@
 import robot from 'robotjs'
 import { GAME_WINDOW_WIDTH } from '../../../_shared/constants'
-import { getMask } from './image'
+import { getMask, getRegion } from './image'
 import { drawSquareAroundCenter } from './draw'
 import { colorObjectToVector } from './color'
 import { findNonZeroMatches } from './search'
@@ -12,9 +12,10 @@ export const drawMatches = ({ type, mat, lowerColor, upperColor, blur }) => {
   const scale = 3
   const matches = []
 
+  const targetRegion = getRegion(mat, { x: 1, y: 1 }, mat.cols - 50, mat.rows - 50)
   // There should be some more complicated logic what to detect and when to detect
   // so that the bot can do various tasks
-  const rescaledMat = mat.rescale(1 / scale)
+  const rescaledMat = targetRegion.rescale(1 / scale)
 
   type.find.map((type) => {
     const matMasked = getMask(rescaledMat, colorObjectToVector(lowerColor[type]), colorObjectToVector(upperColor[type]), blur[type])
@@ -157,5 +158,21 @@ export const playDefence = ({ mat, matches }) => {
     const targetX = closestApple.x + gameWindowX
     const targetY = closestApple.y + gameWindowY
     robot.moveMouse(targetX, targetY)
+  }
+}
+
+export const playRange = ({ mat, matches }) => {
+  robot.setMouseDelay(100)
+  console.log('matches ', matches)
+
+  const gameWindowX = GAME_WINDOW_WIDTH * 2
+  const gameWindowY = 25
+
+  if (matches.length) {
+    const shuffled = shuffle(matches)
+    const targetX = shuffled[0].x + gameWindowX - 6
+    const targetY = shuffled[0].y + gameWindowY - 6
+    robot.moveMouse(targetX, targetY)
+    robot.mouseClick('left')
   }
 }
