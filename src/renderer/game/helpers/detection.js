@@ -12,7 +12,6 @@ export const handleFrame = ({ settings, lowerColor, upperColor, blur }) => (mat,
   if (isRunning && type) {
     const matches = drawMatches({ type, lowerColor, upperColor, blur, mat })
     if (index % 20 === 0) {
-      console.log('matches ', matches)
     }
     if (type.name === 'attack') {
       playAttack({ mat, matches })

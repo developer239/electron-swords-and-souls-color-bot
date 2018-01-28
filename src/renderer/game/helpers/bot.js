@@ -24,6 +24,7 @@ export const drawMatches = ({ type, mat, lowerColor, upperColor, blur }) => {
       matches.push({
         x: match.x * scale,
         y: match.y * scale,
+        type,
       })
       drawSquareAroundCenter(
         mat,
@@ -40,7 +41,9 @@ export const drawMatches = ({ type, mat, lowerColor, upperColor, blur }) => {
 }
 
 export const playAttack = ({ mat, matches }) => {
-  robot.setKeyboardDelay(40)
+  robot.setKeyboardDelay(50)
+
+  const wallX = 78
 
   const areas = [
     {
@@ -48,17 +51,17 @@ export const playAttack = ({ mat, matches }) => {
       name: 'center',
     },
     {
-      rectangle: new Rectangle({ x: 78, y: 105 }, 62, 35),
+      rectangle: new Rectangle({ x: wallX, y: 95 }, 72, 45),
       name: 'appleTop',
       key: 'up',
     },
     {
-      rectangle: new Rectangle({ x: 78, y: 145 }, 92, 25),
+      rectangle: new Rectangle({ x: wallX, y: 145 }, 102, 25),
       name: 'appleMid',
       key: 'right',
     },
     {
-      rectangle: new Rectangle({ x: 78, y: 175 }, 72, 25),
+      rectangle: new Rectangle({ x: wallX, y: 175 }, 102, 25),
       name: 'appleBottom',
       key: 'down',
     },
@@ -94,14 +97,24 @@ export const playAttack = ({ mat, matches }) => {
       }
     })
 
-    const stars = relevant.filter(item => item.areaName === 'star')
-    const apples = relevant.filter(item => item.areaName === 'appleTop' || item.areaName === 'appleMid' || item.areaName === 'appleBottom')
+    const stars = relevant.filter(item => item.type === 'star').filter(item => item.areaName === 'star')
+    const apples = relevant.filter(item => item.type === 'apple').filter(item => item.areaName === 'appleTop' || item.areaName === 'appleMid' || item.areaName === 'appleBottom')
+
+    console.log('apples ', apples)
 
     if (apples.length < 2 && stars.length) {
       robot.keyTap('left')
     } else if (apples.length) {
-      const shuffledApples = shuffle(apples)
-      robot.keyTap(shuffledApples[0].area.key)
+      const distances = []
+      apples.forEach((apple, index) => {
+        const distance = apple.x - wallX
+        distances[index] = distance
+      })
+
+      if (distances.length) {
+        const indexOfSmallestMatch = distances.indexOf(Math.min.apply(null, distances))
+        robot.keyTap(apples[indexOfSmallestMatch].area.key)
+      }
     }
   }
 }
@@ -130,7 +143,6 @@ export const playDefence = ({ mat, matches }) => {
   matches.forEach((match, index) => {
     const distance = pointsDiff(centerPoint, match)
     if (distance > 10) {
-      console.log(distance)
       distances[index] = distance
     }
   })
