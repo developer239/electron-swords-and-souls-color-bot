@@ -1,12 +1,11 @@
 import React, { Component } from 'react'
 import {
   SEND_VIDEO_SCREEN,
-  GAME_WINDOW_HEIGHT,
-  GAME_WINDOW_WIDTH,
   ACTIONS,
-  MODIFIER,
   SEND_SETTINGS,
   SETTINGS_START_RUNNING,
+  GAME_WINDOW_DISPLAY_WIDTH,
+  GAME_WINDOW_DISPLAY_HEIGHT,
 } from '../../_shared/constants'
 import { send, listenTo } from '../_shared/messageHelper'
 import {
@@ -40,7 +39,7 @@ class Main extends Component {
       this.logFps()
       const context = this.canvas.getContext('2d')
       image.onload = () => {
-        context.drawImage(image, 0, 0, GAME_WINDOW_WIDTH * MODIFIER, GAME_WINDOW_HEIGHT * MODIFIER)
+        context.drawImage(image, 0, 0, GAME_WINDOW_DISPLAY_WIDTH, GAME_WINDOW_DISPLAY_HEIGHT)
       }
       image.src = `data:image/jpeg;base64,${args.payload}`
       this.endFps()
@@ -124,8 +123,8 @@ class Main extends Component {
                   ref={canvas => {
                     this.canvas = canvas
                   }}
-                  width={GAME_WINDOW_WIDTH * MODIFIER}
-                  height={GAME_WINDOW_HEIGHT * MODIFIER}
+                  width={GAME_WINDOW_DISPLAY_WIDTH}
+                  height={GAME_WINDOW_DISPLAY_HEIGHT}
                 />
               )}
               {!isStreaming && (<div>Window streaming is currently turned is off. Detection performance might work better as a result.</div>)}

@@ -7,8 +7,8 @@ const createMainWindow = (mainWindow) => windowHelper.createWindow(mainWindow)(
   {
     x: 0,
     y: 0,
-    height: 820,
-    width: constants.GAME_WINDOW_WIDTH * 2 + 184,
+    height: constants.MAIN_WINDOW_HEIGHT,
+    width: constants.MAIN_WINDOW_WIDTH,
   },
 )
 

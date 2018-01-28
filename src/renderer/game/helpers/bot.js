@@ -1,5 +1,9 @@
 import robot from 'robotjs'
-import { GAME_WINDOW_WIDTH } from '../../../_shared/constants'
+import {
+  MAIN_WINDOW_WIDTH,
+  MAIN_WINDOW_HEIGHT,
+  TOP_OFFSET,
+} from '../../../_shared/constants'
 import { getMask, getRegion } from './image'
 import { drawSquareAroundCenter } from './draw'
 import { colorObjectToVector } from './color'
@@ -184,8 +188,8 @@ export const playDefence = ({ mat, matches }) => {
   const indexOfSmallestMatch = distances.indexOf(Math.min.apply(null, distances))
   const closestApple = matches[indexOfSmallestMatch]
 
-  const gameWindowX = GAME_WINDOW_WIDTH * 2
-  const gameWindowY = 25
+  const gameWindowX = MAIN_WINDOW_WIDTH
+  const gameWindowY = TOP_OFFSET
 
   // robot.moveMouseSmooth(gameWindowX, gameWindowY)
 
@@ -197,8 +201,8 @@ export const playDefence = ({ mat, matches }) => {
 }
 
 export const playRange = ({ mat, matches }) => {
-  const gameWindowX = GAME_WINDOW_WIDTH * 2
-  const gameWindowY = 25
+  const gameWindowX = MAIN_WINDOW_WIDTH
+  const gameWindowY = TOP_OFFSET
 
   if (matches.length) {
     const whiteListed = []
