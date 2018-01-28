@@ -66,7 +66,7 @@ export const playAttack = ({ mat, matches }) => {
       key: 'down',
     },
     {
-      rectangle: new Rectangle({ x: 20, y: 130 }, 25, 43),
+      rectangle: new Rectangle({ x: 20, y: 120 }, 25, 43),
       name: 'star',
       key: 'left',
     },
@@ -99,8 +99,6 @@ export const playAttack = ({ mat, matches }) => {
 
     const stars = relevant.filter(item => item.type === 'star').filter(item => item.areaName === 'star')
     const apples = relevant.filter(item => item.type === 'apple').filter(item => item.areaName === 'appleTop' || item.areaName === 'appleMid' || item.areaName === 'appleBottom')
-
-    console.log('apples ', apples)
 
     if (apples.length < 2 && stars.length) {
       robot.keyTap('left')
