@@ -81,8 +81,8 @@ export const playAttack = ({ mat, matches }) => {
   const relevantMatches = []
   matches.forEach(match => {
     areas.forEach(area => {
-      const isIn = area.rectangle.isIn(match)
-      if (isIn) {
+      const doesContain = area.rectangle.doesContain(match)
+      if (doesContain) {
         relevantMatches.push({
           areaName: area.name,
           ...match,
@@ -141,7 +141,7 @@ const Timer = function () {
       const rectangle = blackListed.rectangle
       const elapsedTime = Date.now() - blackListed.added
 
-      if (rectangle.isIn({ x: item.x, y: item.y }) && elapsedTime < this.ignoreLength) {
+      if (rectangle.doesContain({ x: item.x, y: item.y }) && elapsedTime < this.ignoreLength) {
         isIgnored = true
       }
     })

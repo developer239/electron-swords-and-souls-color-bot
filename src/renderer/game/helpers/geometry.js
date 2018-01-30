@@ -7,29 +7,19 @@ export function Rectangle({ x, y }, w, h) {
   this.width = w
   this.height = h
 
-  this.x1 = x
-  this.x2 = this.x + this.width
-  this.y1 = y
-  this.y2 = y + this.height
-
-  this.isIn = function ({ x, y }) {
-    const xStart = this.x1
-    const yStart = this.y1
-    const xEnd = this.x2
-    const yEnd = this.y2
-
-    if ((x >= xStart && x <= xEnd) &&
-      (y >= yStart && y <= yEnd)) {
+  this.doesContain = function doesContain(point) {
+    if ((point.x >= this.x && point.x <= this.x + this.width) &&
+      (point.y >= this.y && point.y <= this.y + this.height)) {
       return true
     }
   }
 
-  this.draw = function (mat, color = [255, 0, 0]) {
+  this.draw = function draw(mat, color = [255, 0, 0]) {
     drawRectangle(
       mat,
       { x: this.x, y: this.y },
       { x: this.x + this.width, y: this.y + this.height },
-      color
+      color,
     )
   }
 }
