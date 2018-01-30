@@ -9,7 +9,7 @@ const PaneSidebar = ({ children }) => (
 )
 
 PaneSidebar.propTypes = {
-  children: PropTypes.node,
+  children: PropTypes.node.isRequired,
 }
 
 export default PaneSidebar

@@ -16,10 +16,14 @@ const Button = ({ children, isActive, onClick }) => (
   </StyledButton>
 )
 
+Button.defaultProps = {
+  isActive: false,
+}
+
 Button.propTypes = {
-  children: PropTypes.node,
+  children: PropTypes.node.isRequired,
   isActive: PropTypes.bool,
-  onClick: PropTypes.func,
+  onClick: PropTypes.func.isRequired,
 }
 
 export default Button

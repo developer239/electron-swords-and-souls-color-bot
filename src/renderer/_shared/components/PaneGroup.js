@@ -9,7 +9,7 @@ const PaneGroup = ({ children }) => (
 )
 
 PaneGroup.propTypes = {
-  children: PropTypes.node,
+  children: PropTypes.node.isRequired,
 }
 
 export default PaneGroup

@@ -19,7 +19,7 @@ import {
   WindowContent,
 } from '../_shared/components/index'
 
-
+// TODO: Use recompose
 class Main extends Component {
   constructor() {
     super()
@@ -63,7 +63,7 @@ class Main extends Component {
   logFps() {
     const elapsedTime = this.now - this.then
     const fps = 1 / elapsedTime
-    console.log(fps.toFixed(2))
+    console.log(`FPS: ${fps.toFixed(2)}`)
   }
 
   setType = (name = '') => () => {
@@ -74,7 +74,7 @@ class Main extends Component {
     send(IPC_SEND_SETTINGS, newState)
   }
 
-  toggleSettings = (key) => () => {
+  toggleSettings = key => () => {
     const value = !this.state[key]
     const newState = this.state
     newState[key] = value

@@ -1,6 +1,7 @@
 import React from 'react'
 import styled from 'styled-components'
 import Divider from './Divider'
+import PropTypes from 'prop-types'
 
 
 const StyledDiv = styled.div`
@@ -15,5 +16,14 @@ const PaneSidebar = ({ children, shouldShowDivider }) => (
     {shouldShowDivider && <Divider />}
   </div>
 )
+
+PaneSidebar.defaultProps = {
+  shouldShowDivider: false,
+}
+
+PaneSidebar.propTypes = {
+  children: PropTypes.node.isRequired,
+  shouldShowDivider: PropTypes.bool,
+}
 
 export default PaneSidebar

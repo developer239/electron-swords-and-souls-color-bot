@@ -14,7 +14,7 @@ const Pane = ({ children }) => (
 )
 
 Pane.propTypes = {
-  children: PropTypes.node,
+  children: PropTypes.node.isRequired,
 }
 
 export default Pane

@@ -86,7 +86,6 @@ Game.propTypes = {
   handleLowerColorChange: PropTypes.func.isRequired,
   handleUpperColorChange: PropTypes.func.isRequired,
   handleBlurChange: PropTypes.func.isRequired,
-  setSettings: PropTypes.func.isRequired,
 }
 
 const enhance = compose(
@@ -99,15 +98,15 @@ const enhance = compose(
     isStreaming: false,
   }),
   withHandlers({
-    handleLowerColorChange: ({ setLowerColor, lowerColor }) => (type, key) => (event) => {
+    handleLowerColorChange: ({ setLowerColor, lowerColor }) => (type, key) => event => {
       lowerColor[type][key] = parseInt(event.target.value, 10)
       setLowerColor(lowerColor)
     },
-    handleUpperColorChange: ({ setUpperColor, upperColor }) => (type, key) => (event) => {
+    handleUpperColorChange: ({ setUpperColor, upperColor }) => (type, key) => event => {
       upperColor[type][key] = parseInt(event.target.value, 10)
       setUpperColor(upperColor)
     },
-    handleBlurChange: ({ setBlur, blur }) => type => (event) => {
+    handleBlurChange: ({ setBlur, blur }) => type => event => {
       blur[type] = parseInt(event.target.value, 10)
       setBlur(blur)
     },

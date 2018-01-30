@@ -9,7 +9,7 @@ const WindowContent = ({ children }) => (
 )
 
 WindowContent.propTypes = {
-  children: PropTypes.node,
+  children: PropTypes.node.isRequired,
 }
 
 export default WindowContent

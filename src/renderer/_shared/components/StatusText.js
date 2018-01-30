@@ -14,7 +14,7 @@ const StatusText = ({ value }) => (
 )
 
 StatusText.propTypes = {
-  value: PropTypes.string,
+  value: PropTypes.string.isRequired,
 }
 
 export default StatusText
