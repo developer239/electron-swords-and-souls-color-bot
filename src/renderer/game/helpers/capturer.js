@@ -15,8 +15,6 @@ export const getGameWindowSource = () => new Promise(resolve => {
       throw error
     }
 
-    console.log('sources ', sources)
-
     for (let i = 0; i < sources.length; ++i) {
       const window = sources[i]
       if (window.name === GAME_WINDOW_NAME) {
@@ -26,20 +24,20 @@ export const getGameWindowSource = () => new Promise(resolve => {
   })
 })
 
-export const startMediaStream = (processFrame) => getGameWindowSource().then(source => navigator.mediaDevices.getUserMedia({
-    audio: false,
-    video: {
-      mandatory: {
-        chromeMediaSource: 'desktop',
-        chromeMediaSourceId: source.id,
-        minWidth: GAME_WINDOW_WIDTH,
-        maxWidth: GAME_WINDOW_WIDTH,
-        minHeight: GAME_WINDOW_HEIGHT,
-        maxHeight: GAME_WINDOW_HEIGHT,
-      },
-    },
-  }).then(handleMediaStream(processFrame)),
-)
+export const stream = (video, canvas, processFrame, index) => {
+  canvas.getContext('2d').drawImage(video, 0, 0, GAME_WINDOW_WIDTH, GAME_WINDOW_HEIGHT)
+  canvas.toBlob(blob => {
+    toBuffer(blob, (err, buffer) => {
+      if (err) {
+        throw Error(err)
+      }
+      const mat = cv.imdecode(buffer)
+      index += 1
+      processFrame(mat, index)
+      stream(video, canvas, processFrame, index)
+    })
+  })
+}
 
 export const handleMediaStream = processFrame => MediaStream => {
   const video = document.createElement('video')
@@ -54,14 +52,17 @@ export const handleMediaStream = processFrame => MediaStream => {
   }
 }
 
-export const stream = (video, canvas, processFrame, index) => {
-  canvas.getContext('2d').drawImage(video, 0, 0, GAME_WINDOW_WIDTH, GAME_WINDOW_HEIGHT)
-  canvas.toBlob((blob) => {
-    toBuffer(blob, (err, buffer) => {
-      const mat = cv.imdecode(buffer)
-      index += 1
-      processFrame(mat, index)
-      stream(video, canvas, processFrame, index)
-    })
-  })
-}
+export const startMediaStream = processFrame => getGameWindowSource().then(source =>
+  navigator.mediaDevices.getUserMedia({
+    audio: false,
+    video: {
+      mandatory: {
+        chromeMediaSource: 'desktop',
+        chromeMediaSourceId: source.id,
+        minWidth: GAME_WINDOW_WIDTH,
+        maxWidth: GAME_WINDOW_WIDTH,
+        minHeight: GAME_WINDOW_HEIGHT,
+        maxHeight: GAME_WINDOW_HEIGHT,
+      },
+    },
+  }).then(handleMediaStream(processFrame)))
