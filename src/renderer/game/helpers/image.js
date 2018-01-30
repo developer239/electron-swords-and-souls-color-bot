@@ -1,4 +1,5 @@
 import { remote } from 'electron'
+import { createVectorFromObject } from './color'
 
 
 const cv = remote.require('opencv4nodejs')
@@ -43,4 +44,69 @@ export const drawSquareAroundCenter = (region, center, r = 18, createNew = true)
   const a = { x: x - r, y: y - r }
   const b = { x: x + r, y: y + r }
   return drawRectangle(returnedMatrix, a, b)
+}
+
+// TODO: Configure these parameters
+export const findNonZeroMatches = (matrix, neighbourSize = 3) => {
+  const matches = []
+  const nonZeroMatches = matrix.findNonZero()
+
+  nonZeroMatches.forEach(nonZeroMatch => {
+    let hasNoNeighbours = true
+
+    matches.forEach(match => {
+      if (
+        nonZeroMatch.x - match.x - neighbourSize < 0
+        && nonZeroMatch.y - match.y - neighbourSize < 0
+      ) {
+        hasNoNeighbours = false
+      }
+    })
+
+    if (hasNoNeighbours) {
+      matches.push({
+        x: nonZeroMatch.x,
+        y: nonZeroMatch.y,
+      })
+    }
+  })
+
+  return matches
+}
+
+export const drawMatches = ({ type, mat, lowerColor, upperColor, blur }) => {
+  const scale = 3
+  const matches = []
+
+  const targetRegion = getRegion(mat, { x: 1, y: 1 }, mat.cols - 50, mat.rows - 50)
+  const rescaledMat = targetRegion.rescale(1 / scale)
+
+  type.find.forEach(typeToFind => {
+    const matMasked = getMask(
+      rescaledMat,
+      createVectorFromObject(lowerColor[typeToFind]),
+      createVectorFromObject(upperColor[typeToFind]),
+      blur[typeToFind],
+    )
+    // TODO: Configure these parameters
+    const foundMatches = findNonZeroMatches(matMasked)
+
+    foundMatches.forEach(match => {
+      matches.push({
+        x: match.x * scale,
+        y: match.y * scale,
+        type: typeToFind,
+      })
+      drawSquareAroundCenter(
+        mat,
+        {
+          x: match.x * scale,
+          y: match.y * scale,
+        },
+        10,
+        false,
+      )
+    })
+  })
+  return matches
 }

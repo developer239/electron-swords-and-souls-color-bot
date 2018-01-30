@@ -3,9 +3,6 @@ import {
   MAIN_WINDOW_WIDTH,
   TOP_OFFSET,
 } from '../../../_shared/constants'
-import { getMask, getRegion, drawSquareAroundCenter } from './image'
-import { createVectorFromObject } from './color'
-import { findNonZeroMatches } from './search'
 import { Rectangle, pointsDiff } from './geometry'
 
 
@@ -47,44 +44,6 @@ function Timer() {
 }
 
 const timer = new Timer()
-
-export const drawMatches = ({ type, mat, lowerColor, upperColor, blur }) => {
-  const scale = 3
-  const matches = []
-
-  const targetRegion = getRegion(mat, { x: 1, y: 1 }, mat.cols - 50, mat.rows - 50)
-  // There should be some more complicated logic what to detect and when to detect
-  // so that the bot can do various tasks
-  const rescaledMat = targetRegion.rescale(1 / scale)
-
-  type.find.forEach(typeToFind => {
-    const matMasked = getMask(
-      rescaledMat,
-      createVectorFromObject(lowerColor[typeToFind]),
-      createVectorFromObject(upperColor[typeToFind]),
-      blur[typeToFind],
-    )
-    const foundMatches = findNonZeroMatches(matMasked)
-
-    foundMatches.forEach(match => {
-      matches.push({
-        x: match.x * scale,
-        y: match.y * scale,
-        type: typeToFind,
-      })
-      drawSquareAroundCenter(
-        mat,
-        {
-          x: match.x * scale,
-          y: match.y * scale,
-        },
-        10,
-        false,
-      )
-    })
-  })
-  return matches
-}
 
 export const playAttack = ({ mat, matches }) => {
   robot.setKeyboardDelay(50)

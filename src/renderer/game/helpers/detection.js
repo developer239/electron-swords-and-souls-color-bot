@@ -1,6 +1,7 @@
 import { send } from '../../_shared/helpers/message'
 import { IPC_SEND_VIDEO_SCREEN } from '../../../_shared/constants'
-import { drawMatches, playAttack, playDefence, playRange } from './bot'
+import { playAttack, playDefence, playRange } from './bot'
+import { drawMatches } from './image'
 import { remote } from 'electron'
 
 
@@ -13,6 +14,7 @@ export const handleFrame = ({ settings, lowerColor, upperColor, blur }) => mat =
   if (isRunning && type) {
     const matches = drawMatches({ type, lowerColor, upperColor, blur, mat })
 
+    // TODO: Initialzie bot object here and move the switch into the bot
     switch (type.name) { // eslint-disable-line
       case 'attack':
         playAttack({ mat, matches })
