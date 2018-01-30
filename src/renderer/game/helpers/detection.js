@@ -7,21 +7,22 @@ import { remote } from 'electron'
 const cv = remote.require('opencv4nodejs')
 
 
-export const handleFrame = ({ settings, lowerColor, upperColor, blur }) => (mat, index) => {
+export const handleFrame = ({ settings, lowerColor, upperColor, blur }) => mat => {
   const { isRunning, isStreaming, type } = settings
 
   if (isRunning && type) {
     const matches = drawMatches({ type, lowerColor, upperColor, blur, mat })
-    if (index % 20 === 0) {
-    }
-    if (type.name === 'attack') {
-      playAttack({ mat, matches })
-    }
-    if (type.name === 'defence') {
-      playDefence({ mat, matches })
-    }
-    if (type.name === 'range') {
-      playRange({ mat, matches })
+
+    switch (type.name) { // eslint-disable-line
+      case 'attack':
+        playAttack({ mat, matches })
+        break
+      case 'defence':
+        playDefence({ mat, matches })
+        break
+      case 'range':
+        playRange({ mat, matches })
+        break
     }
   }
 

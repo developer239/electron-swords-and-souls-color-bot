@@ -4,10 +4,49 @@ import {
   TOP_OFFSET,
 } from '../../../_shared/constants'
 import { getMask, getRegion, drawSquareAroundCenter } from './image'
-import { colorObjectToVector } from './color'
+import { createVectorFromObject } from './color'
 import { findNonZeroMatches } from './search'
 import { Rectangle, pointsDiff } from './geometry'
 
+
+function Timer() {
+  this.blackList = []
+  this.size = 70
+  this.ignoreLength = 2000
+
+  this.addToBlackList = function addToBlackList(item) {
+    const rectangle = new Rectangle(
+      { x: item.x - this.size / 2, y: item.y - this.size / 2 },
+      this.size, this.size,
+    )
+    this.blackList.push({
+      item,
+      added: Date.now(),
+      rectangle,
+    })
+  }
+
+  this.isIgnored = function isIgnored(item) {
+    let shouldBeIgnored = false
+
+    this.blackList.forEach(blackListed => {
+      const rectangle = blackListed.rectangle
+      const elapsedTime = Date.now() - blackListed.added
+
+      if (rectangle.doesContain({ x: item.x, y: item.y }) && elapsedTime < this.ignoreLength) {
+        shouldBeIgnored = true
+      }
+    })
+    return shouldBeIgnored
+  }
+
+  this.clearList = function clearList() {
+    this.blackList =
+      this.blackList.filter(blackListed => Date.now() - blackListed.added < this.ignoreLength)
+  }
+}
+
+const timer = new Timer()
 
 export const drawMatches = ({ type, mat, lowerColor, upperColor, blur }) => {
   const scale = 3
@@ -18,15 +57,20 @@ export const drawMatches = ({ type, mat, lowerColor, upperColor, blur }) => {
   // so that the bot can do various tasks
   const rescaledMat = targetRegion.rescale(1 / scale)
 
-  type.find.map((type) => {
-    const matMasked = getMask(rescaledMat, colorObjectToVector(lowerColor[type]), colorObjectToVector(upperColor[type]), blur[type])
+  type.find.forEach(typeToFind => {
+    const matMasked = getMask(
+      rescaledMat,
+      createVectorFromObject(lowerColor[typeToFind]),
+      createVectorFromObject(upperColor[typeToFind]),
+      blur[typeToFind],
+    )
     const foundMatches = findNonZeroMatches(matMasked)
 
     foundMatches.forEach(match => {
       matches.push({
         x: match.x * scale,
         y: match.y * scale,
-        type,
+        type: typeToFind,
       })
       drawSquareAroundCenter(
         mat,
@@ -91,15 +135,16 @@ export const playAttack = ({ mat, matches }) => {
   })
 
   if (relevantMatches.length) {
-    const relevant = relevantMatches.map(relevant => {
-      const area = areas.find(area => area.name === relevant.areaName)
+    const relevant = relevantMatches.map(relevantMatch => {
+      const area = areas.find(areToFind => areToFind.name === relevantMatch.areaName)
       return {
-        ...relevant,
+        ...relevantMatch,
         area,
       }
     })
 
-    const stars = relevant.filter(item => item.type === 'star').filter(item => item.areaName === 'star')
+    const stars =
+      relevant.filter(item => item.type === 'star').filter(item => item.areaName === 'star')
     const apples = relevant.filter(item => item.type === 'apple').filter(item => item.areaName === 'appleTop' || item.areaName === 'appleMid' || item.areaName === 'appleBottom')
 
     if (apples.length < 2 && stars.length) {
@@ -107,8 +152,7 @@ export const playAttack = ({ mat, matches }) => {
     } else if (apples.length) {
       const distances = []
       apples.forEach((apple, index) => {
-        const distance = apple.x - wallX
-        distances[index] = distance
+        distances[index] = apple.x - wallX
       })
 
       if (distances.length) {
@@ -118,41 +162,6 @@ export const playAttack = ({ mat, matches }) => {
     }
   }
 }
-
-const Timer = function () {
-  this.blackList = []
-  this.size = 70
-  this.ignoreLength = 2000
-
-  this.addToBlackList = function (item, mat) {
-    const rectangle = new Rectangle({ x: item.x - this.size / 2, y: item.y - this.size / 2 }, this.size, this.size)
-    this.blackList.push({
-      item,
-      added: Date.now(),
-      rectangle,
-    })
-  }
-
-  this.isIgnored = function (item) {
-    let isIgnored = false
-
-    this.blackList.forEach(blackListed => {
-      const rectangle = blackListed.rectangle
-      const elapsedTime = Date.now() - blackListed.added
-
-      if (rectangle.doesContain({ x: item.x, y: item.y }) && elapsedTime < this.ignoreLength) {
-        isIgnored = true
-      }
-    })
-    return isIgnored
-  }
-
-  this.clearList = function () {
-    this.blackList = this.blackList.filter(blackListed => Date.now() - blackListed.added < this.ignoreLength)
-  }
-}
-
-const timer = new Timer()
 
 export const playDefence = ({ mat, matches }) => {
   robot.setMouseDelay(1)
