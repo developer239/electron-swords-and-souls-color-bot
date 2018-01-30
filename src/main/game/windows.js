@@ -27,6 +27,7 @@ const createHiddenGameWindow = (hiddenGameWindow) => windowHelper.createWindow(h
     width: 500,
     height: 550,
     frame: false,
+    show: false,
   },
 )
 
