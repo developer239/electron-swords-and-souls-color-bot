@@ -1,4 +1,4 @@
-import { drawRectangle } from './draw'
+import { drawRectangle } from './image'
 
 
 export function Rectangle({ x, y }, w, h) {

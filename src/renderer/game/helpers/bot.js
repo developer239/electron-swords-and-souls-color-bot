@@ -3,8 +3,7 @@ import {
   MAIN_WINDOW_WIDTH,
   TOP_OFFSET,
 } from '../../../_shared/constants'
-import { getMask, getRegion } from './image'
-import { drawSquareAroundCenter } from './draw'
+import { getMask, getRegion, drawSquareAroundCenter } from './image'
 import { colorObjectToVector } from './color'
 import { findNonZeroMatches } from './search'
 import { Rectangle, pointsDiff } from './geometry'
