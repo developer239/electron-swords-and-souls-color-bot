@@ -130,8 +130,7 @@ class Main extends Component {
                 />
               )}
               {!isStreaming && (
-                <div>Window streaming is currently turned is off. Detection performance might work better as a
-                  result.</div>)}
+                <div>Window streaming is currently turned off. Object detection will be faster.</div>)}
             </Pane>
           </PaneGroup>
         </WindowContent>
