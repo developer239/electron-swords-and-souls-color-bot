@@ -7,7 +7,6 @@ import { remote } from 'electron'
 
 const cv = remote.require('opencv4nodejs')
 
-
 export const handleFrame = ({ settings, lowerColor, upperColor, blur }) => mat => {
   const { isRunning, isStreaming, type } = settings
 

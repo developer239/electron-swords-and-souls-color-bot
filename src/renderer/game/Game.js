@@ -4,7 +4,7 @@ import { TYPES, TYPES_LOWER_COLORS, TYPES_UPPER_COLORS, TYPES_BLUR, IPC_SEND_SET
 import { compose, lifecycle, withState, withHandlers } from 'recompose'
 import { listenTo } from '../_shared/helpers/message'
 import { startMediaStream } from './helpers/capturer'
-import { handleFrame } from './helpers/detection'
+import { handleFrame } from './helpers/frame'
 
 
 const Game = ({ handleLowerColorChange, lowerColor, handleUpperColorChange, upperColor, blur, handleBlurChange }) => (
