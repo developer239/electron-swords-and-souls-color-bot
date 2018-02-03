@@ -13,7 +13,7 @@ const normalizePoint = point => ({
 })
 
 export const playAttack = ({ mat, matches, gameBot }) => {
-  // If apples x < CHARACTER_HIT_X then character was hit
+  // If apples x < CHARACTER_HIT_X then character is hit by apple
   const CHARACTER_HIT_X = 78
 
   const areas = [
@@ -25,61 +25,60 @@ export const playAttack = ({ mat, matches, gameBot }) => {
       rectangle: new Rectangle({ x: CHARACTER_HIT_X, y: 95 }, 72, 45),
       name: 'appleTop',
       key: 'up',
+      relevantTo: 'apple',
     },
     {
       rectangle: new Rectangle({ x: CHARACTER_HIT_X, y: 145 }, 92, 25),
       name: 'appleMid',
       key: 'right',
+      relevantTo: 'apple',
     },
     {
       rectangle: new Rectangle({ x: CHARACTER_HIT_X, y: 175 }, 92, 25),
       name: 'appleBottom',
       key: 'down',
+      relevantTo: 'apple',
     },
     {
       rectangle: new Rectangle({ x: 20, y: 120 }, 25, 43),
       name: 'star',
       key: 'left',
+      relevantTo: 'star',
     },
   ]
 
   drawRectangles(areas, mat)
 
-  const relevantMatches = matches.forEach(match => {
-    areas.forEach(area => {
-      const doesContain = area.rectangle.doesContain(match)
-      if (doesContain) {
-        relevantMatches.push({
-          areaName: area.name,
-          ...match,
-        })
+  const relevantMatches = matches.map(match => {
+    const area = areas.find(areaToFind => areaToFind.rectangle.doesContain(match))
+    if (area) {
+      return {
+        area,
+        ...match,
       }
-    })
-  })
+    }
+    return false
+  }).filter(item => item)
 
   if (relevantMatches.length) {
-    const relevant = relevantMatches.map(relevantMatch => {
-      const area = areas.find(areToFind => areToFind.name === relevantMatch.areaName)
-      return {
-        ...relevantMatch,
-        area,
-      }
-    })
-
-    // TODO: Use stars
-    const stars =
-      relevant.filter(item => item.type === 'star').filter(item => item.areaName === 'star')
-    const apples = relevant.filter(item => item.type === 'apple').filter(item => item.areaName === 'appleTop' || item.areaName === 'appleMid' || item.areaName === 'appleBottom')
+    const stars = relevantMatches.filter(item => item.type === 'star' && item.area.relevantTo === 'star')
+    const apples = relevantMatches.filter(item => (item.type === 'apple') && item.area.relevantTo === 'apple')
 
     if (apples.length) {
-      const distances = []
-      apples.forEach((apple, index) => {
-        distances[index] = apple.x - CHARACTER_HIT_X
-      })
+      const closestApple = relevantMatches.reduce((carry, item) => {
+        if (!carry) {
+          return item
+        }
+        const itemDistance = item.x - CHARACTER_HIT_X
+        const carryDistance = carry.x - CHARACTER_HIT_X
+        if (itemDistance < carryDistance) {
+          return item
+        }
+        return carry
+      }, null)
 
-      const indexOfSmallestMatch = distances.indexOf(Math.min.apply(null, distances))
       if (!gameBot.getIsPlaying()) {
-        gameBot.addKeyTap(apples[indexOfSmallestMatch].area.key)
+        gameBot.addKeyTap(closestApple.area.key)
         gameBot.addWait(100)
         gameBot.play()
       }
