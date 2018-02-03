@@ -55,16 +55,19 @@ const ACTIONS = [
     label: 'Attack',
     name: 'attack',
     find: ['apple', 'star'],
+    neighbourSize: 3,
   },
   {
     label: 'Defence',
     name: 'defence',
     find: ['apple'],
+    neighbourSize: 3,
   },
   {
     label: 'Range',
     name: 'range',
     find: ['range'],
+    neighbourSize: 12,
   },
 ]
 

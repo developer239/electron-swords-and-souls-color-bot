@@ -46,8 +46,7 @@ export const drawSquareAroundCenter = (region, center, r = 18, createNew = true)
   return drawRectangle(returnedMatrix, a, b)
 }
 
-// TODO: Configure these parameters
-export const findNonZeroMatches = (matrix, neighbourSize = 3) => {
+export const findNonZeroMatches = (matrix, neighbourSize) => {
   const matches = []
   const nonZeroMatches = matrix.findNonZero()
 
@@ -88,8 +87,8 @@ export const drawMatches = ({ type, mat, lowerColor, upperColor, blur }) => {
       createVectorFromObject(upperColor[typeToFind]),
       blur[typeToFind],
     )
-    // TODO: Configure these parameters
-    const foundMatches = findNonZeroMatches(matMasked)
+
+    const foundMatches = findNonZeroMatches(matMasked, type.neighbourSize)
 
     foundMatches.forEach(match => {
       matches.push({
