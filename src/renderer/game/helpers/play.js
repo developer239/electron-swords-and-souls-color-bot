@@ -1,16 +1,6 @@
-import {
-  MAIN_WINDOW_WIDTH,
-  TOP_OFFSET,
-} from '../../../_shared/constants'
 import { Rectangle, pointsDiff } from './geometry'
+import { drawRectangles, normalizePoint } from './playHelpers'
 
-
-const drawRectangles = (areas, mat) => areas.forEach(area => area.rectangle.draw(mat))
-
-const normalizePoint = point => ({
-  x: point.x + MAIN_WINDOW_WIDTH,
-  y: point.y + TOP_OFFSET,
-})
 
 export const playAttack = ({ mat, matches, gameBot }) => {
   // If apples x < CHARACTER_HIT_X then character is hit by apple
