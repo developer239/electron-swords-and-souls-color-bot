@@ -16,7 +16,7 @@ export function BlackList() {
   this.matchBlackList = []
   this.actionBlackList = []
 
-  this.addMatchToBlackList = function addMatchToBlackList(item, size = 110, ignoreFor = 2500) {
+  this.addMatchToBlackList = function addMatchToBlackList(item, size = 70, ignoreFor = 2500) {
     this.matchBlackList.push({
       item,
       added: Date.now(),
@@ -38,39 +38,18 @@ export function BlackList() {
   }
 
   this.isMatchBlackListed = function isMatchBlackListed(item) {
-    let shouldBeIgnored = false
-
-    // TODO: Use reduce
     this.clearMatchBlackList()
-    this.matchBlackList.forEach(blackListed => {
-      const elapsedTime = Date.now() - blackListed.added
-      if (
-        blackListed.rectangle.doesContain({
-          x: item.x,
-          y: item.y,
-        })
-        && elapsedTime < blackListed.ignoreFor
-      ) {
-        shouldBeIgnored = true
-      }
-    })
-
-    return shouldBeIgnored
+    return this.matchBlackList.reduce((carry, blackListed) => carry
+      || blackListed.rectangle.doesContain({
+        x: item.x,
+        y: item.y,
+      }) && Date.now() - blackListed.added < blackListed.ignoreFor, false)
   }
 
   this.isActionBlackListed = function isActionBlackListed(item) {
-    let shouldBeIgnored = false
-
-    // TODO: Use reduce
     this.clearActionBlackList()
-    this.actionBlackList.forEach(blackListed => {
-      const elapsedTime = Date.now() - blackListed.added
-      if (blackListed.action.name === item.name && elapsedTime < blackListed.ignoreFor) {
-        shouldBeIgnored = true
-      }
-    })
-
-    return shouldBeIgnored
+    return this.actionBlackList.reduce((carry, blackListed) => carry
+      || blackListed.action.name === item.name && Date.now() - blackListed.added < blackListed.ignoreFor, false)
   }
 
   this.clearActionBlackList = function clearActionBlackList() {
