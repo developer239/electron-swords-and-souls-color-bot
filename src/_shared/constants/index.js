@@ -44,7 +44,7 @@ const TYPES_LOWER_COLORS = {
 }
 const TYPES_UPPER_COLORS = {
   apple: { b: 200, g: 65, r: 255 },
-  star: { b: 130, g: 255, r: 255 },
+  star: { b: 115, g: 255, r: 255 },
   range: { b: 255, g: 255, r: 255 },
 }
 const TYPES_BLUR = { apple: 2, star: 2, range: 2 }
