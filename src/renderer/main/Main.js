@@ -19,6 +19,7 @@ import {
   WindowContent,
 } from '../_shared/components/index'
 
+
 // TODO: Use recompose
 class Main extends Component {
   constructor() {

@@ -34,11 +34,6 @@ function Bot() {
     this.addToQueue(callback)
   }
 
-  this.addClickRight = () => {
-    const callback = () => robot.mouseClick('right')
-    this.addToQueue(callback)
-  }
-
   this.addKeyTap = key => {
     const callback = () => robot.keyTap(key)
     this.addToQueue(callback)
@@ -65,4 +60,4 @@ function Bot() {
   }
 }
 
-module.exports = Bot
+export default Bot
