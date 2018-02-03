@@ -1,11 +1,14 @@
+import { remote } from 'electron'
+import Bot from './bot'
+import { playAttack, playDefence, playRange } from './play'
+import { drawMatches } from './image'
 import { send } from '../../_shared/helpers/message'
 import { IPC_SEND_VIDEO_SCREEN } from '../../../_shared/constants'
-import { playAttack, playDefence, playRange } from './bot'
-import { drawMatches } from './image'
-import { remote } from 'electron'
 
 
 const cv = remote.require('opencv4nodejs')
+
+const gameBot = new Bot()
 
 export const handleFrame = ({ settings, lowerColor, upperColor, blur }) => mat => {
   const { isRunning, isStreaming, type } = settings
@@ -13,16 +16,15 @@ export const handleFrame = ({ settings, lowerColor, upperColor, blur }) => mat =
   if (isRunning && type) {
     const matches = drawMatches({ type, lowerColor, upperColor, blur, mat })
 
-    // TODO: Initialzie bot object here and move the switch into the bot
     switch (type.name) { // eslint-disable-line
       case 'attack':
-        playAttack({ mat, matches })
+        playAttack({ mat, matches, gameBot })
         break
       case 'defence':
-        playDefence({ mat, matches })
+        playDefence({ mat, matches, gameBot })
         break
       case 'range':
-        playRange({ mat, matches })
+        playRange({ mat, matches, gameBot })
         break
     }
   }
