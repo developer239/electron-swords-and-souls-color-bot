@@ -1,6 +1,8 @@
 import { Rectangle, pointsDiff } from './geometry'
-import { drawRectangles, normalizePoint } from './playHelpers'
+import { drawRectangles, normalizePoint, BlackList } from './playHelpers'
 
+
+const blackList = new BlackList()
 
 export const playAttack = ({ mat, matches, gameBot }) => {
   // If apples x < CHARACTER_HIT_X then character is hit by apple
@@ -50,12 +52,12 @@ export const playAttack = ({ mat, matches, gameBot }) => {
     return false
   }).filter(item => item)
 
-  if (relevantMatches.length) {
-    const stars = relevantMatches.filter(item => item.type === 'star' && item.area.relevantTo === 'star')
-    const apples = relevantMatches.filter(item => (item.type === 'apple') && item.area.relevantTo === 'apple')
+  if (relevantMatches.length && !gameBot.getIsPlaying()) {
+    const stars = relevantMatches.filter(item => item.type === 'star' && item.area.relevantTo === 'star').filter(() => !blackList.isActionBlackListed({ name: 'left' }))
+    const apples = relevantMatches.filter(item => (item.type === 'apple') && item.area.relevantTo === 'apple').filter(item => !blackList.isActionBlackListed({ name: item.area.key }))
 
     if (apples.length) {
-      const closestApple = relevantMatches.reduce((carry, item) => {
+      const closestApple = apples.reduce((carry, item) => {
         if (!carry) {
           return item
         }
@@ -67,16 +69,14 @@ export const playAttack = ({ mat, matches, gameBot }) => {
         return carry
       }, null)
 
-      if (!gameBot.getIsPlaying()) {
-        gameBot.addKeyTap(closestApple.area.key)
-        gameBot.addWait(100)
-        gameBot.play()
-      }
+      blackList.addActionToBlackList({ name: closestApple.area.key })
+      gameBot.addKeyTap(closestApple.area.key)
+      gameBot.addWait(30)
+      gameBot.play()
     } else if (stars.length) {
-      if (!gameBot.getIsPlaying()) {
-        gameBot.addKeyTap('left')
-        gameBot.play()
-      }
+      blackList.addActionToBlackList({ name: 'left' }, 200)
+      gameBot.addKeyTap('left')
+      gameBot.play()
     }
   }
 }
@@ -121,14 +121,20 @@ export const playDefence = ({ mat, matches, gameBot }) => {
 }
 
 export const playRange = ({ matches, gameBot }) => {
-  if (matches.length) {
-    const match = matches[Math.floor(Math.random() * matches.length)]
-    const targetPoint = normalizePoint(match)
-    if (!gameBot.getIsPlaying()) {
+  if (!gameBot.getIsPlaying()) {
+    const whiteListedMatches = matches.filter(matchToFilter => !blackList.isMatchBlackListed(normalizePoint(matchToFilter)))
+    if (whiteListedMatches.length) {
+      const match = whiteListedMatches[Math.floor(Math.random() * whiteListedMatches.length)]
+      const targetPoint = normalizePoint(match)
+      blackList.addMatchToBlackList(targetPoint)
       gameBot.addMoveMouse(targetPoint)
       gameBot.addWait(300)
       gameBot.addClickLeft()
-      gameBot.addWait(2000)
+      gameBot.addWait(200)
+      gameBot.addMouseToggleLeft()
+      gameBot.play()
+    } else {
+      gameBot.addMoveMouseSmooth(normalizePoint({ x: 20, y: 200 }))
       gameBot.play()
     }
   }

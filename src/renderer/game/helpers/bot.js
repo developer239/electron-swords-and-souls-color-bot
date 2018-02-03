@@ -25,6 +25,16 @@ function Bot() {
     this.addToQueue(callback)
   }
 
+  this.addMoveMouseSmooth = point => {
+    const callback = () => robot.moveMouseSmooth(point.x, point.y)
+    this.addToQueue(callback)
+  }
+
+  this.addMouseToggleLeft = () => {
+    const callback = () => robot.mouseToggle('down', 'left')
+    this.addToQueue(callback)
+  }
+
   this.addWait = ms => {
     this.queue.push({ type: 'wait', ms })
   }
