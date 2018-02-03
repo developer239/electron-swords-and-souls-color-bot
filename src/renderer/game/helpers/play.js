@@ -5,28 +5,34 @@ import {
 import { Rectangle, pointsDiff } from './geometry'
 
 
-const gameWindowX = MAIN_WINDOW_WIDTH
-const gameWindowY = TOP_OFFSET
+const drawRectangles = (areas, mat) => areas.forEach(area => area.rectangle.draw(mat))
+
+const normalizePoint = point => ({
+  x: point.x + MAIN_WINDOW_WIDTH,
+  y: point.y + TOP_OFFSET,
+})
 
 export const playAttack = ({ mat, matches, gameBot }) => {
-  const WALL_X = 78
+  // If apples x < CHARACTER_HIT_X then character was hit
+  const CHARACTER_HIT_X = 78
+
   const areas = [
     {
       rectangle: new Rectangle({ x: 57, y: 140 }, 21, 55),
       name: 'center',
     },
     {
-      rectangle: new Rectangle({ x: WALL_X, y: 95 }, 72, 45),
+      rectangle: new Rectangle({ x: CHARACTER_HIT_X, y: 95 }, 72, 45),
       name: 'appleTop',
       key: 'up',
     },
     {
-      rectangle: new Rectangle({ x: WALL_X, y: 145 }, 92, 25),
+      rectangle: new Rectangle({ x: CHARACTER_HIT_X, y: 145 }, 92, 25),
       name: 'appleMid',
       key: 'right',
     },
     {
-      rectangle: new Rectangle({ x: WALL_X, y: 175 }, 92, 25),
+      rectangle: new Rectangle({ x: CHARACTER_HIT_X, y: 175 }, 92, 25),
       name: 'appleBottom',
       key: 'down',
     },
@@ -36,10 +42,10 @@ export const playAttack = ({ mat, matches, gameBot }) => {
       key: 'left',
     },
   ]
-  areas.forEach(area => area.rectangle.draw(mat))
 
-  const relevantMatches = []
-  matches.forEach(match => {
+  drawRectangles(areas, mat)
+
+  const relevantMatches = matches.forEach(match => {
     areas.forEach(area => {
       const doesContain = area.rectangle.doesContain(match)
       if (doesContain) {
@@ -68,7 +74,7 @@ export const playAttack = ({ mat, matches, gameBot }) => {
     if (apples.length) {
       const distances = []
       apples.forEach((apple, index) => {
-        distances[index] = apple.x - WALL_X
+        distances[index] = apple.x - CHARACTER_HIT_X
       })
 
       const indexOfSmallestMatch = distances.indexOf(Math.min.apply(null, distances))
@@ -97,29 +103,29 @@ export const playDefence = ({ mat, matches, gameBot }) => {
     },
   ]
 
+  drawRectangles(areas, mat)
+
   const centerPoint = {
     x: centerTopLeft.x + (centerWidth / 2),
     y: centerTopLeft.y + (centerHeight / 2),
   }
 
-  areas.forEach(area => area.rectangle.draw(mat))
-
-  const distances = []
-  matches.forEach((match, index) => {
-    const distance = pointsDiff(centerPoint, match)
-    if (distance > 10) {
-      distances[index] = distance
+  const closestApple = matches.reduce((carry, item) => {
+    if (!carry) {
+      return item
     }
-  })
-
-  const indexOfSmallestMatch = distances.indexOf(Math.min.apply(null, distances))
-  const closestApple = matches[indexOfSmallestMatch]
+    const itemDistance = pointsDiff(centerPoint, item)
+    const carriedDistance = pointsDiff(centerPoint, carry)
+    if (itemDistance > 10 && itemDistance < carriedDistance) {
+      return item
+    }
+    return carry
+  }, null)
 
   if (closestApple) {
     if (!gameBot.getIsPlaying()) {
-      const targetX = closestApple.x + gameWindowX
-      const targetY = closestApple.y + gameWindowY
-      gameBot.addMoveMouse({ x: targetX, y: targetY })
+      const targetPoint = normalizePoint(closestApple)
+      gameBot.addMoveMouse(targetPoint)
       gameBot.play()
     }
   }
@@ -127,11 +133,10 @@ export const playDefence = ({ mat, matches, gameBot }) => {
 
 export const playRange = ({ matches, gameBot }) => {
   if (matches.length) {
-    const rangeTarget = matches[Math.floor(Math.random() * matches.length)]
-    const targetX = rangeTarget.x + gameWindowX - 5
-    const targetY = rangeTarget.y + gameWindowY - 5
+    const match = matches[Math.floor(Math.random() * matches.length)]
+    const targetPoint = normalizePoint(match)
     if (!gameBot.getIsPlaying()) {
-      gameBot.addMoveMouse({ x: targetX, y: targetY })
+      gameBot.addMoveMouse(targetPoint)
       gameBot.addWait(300)
       gameBot.addClickLeft()
       gameBot.addWait(2000)
