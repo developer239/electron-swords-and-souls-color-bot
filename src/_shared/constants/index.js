@@ -2,6 +2,8 @@
 // Windows
 //
 
+const PPAPI_VERSION = '28.0.0.137'
+
 // GAME WINDOW is window with swords and souls game
 const GAME_WINDOW_WIDTH = 350
 const GAME_WINDOW_HEIGHT = 275
@@ -72,6 +74,7 @@ const ACTIONS = [
 ]
 
 module.exports = {
+  PPAPI_VERSION,
   GAME_WINDOW_WIDTH,
   GAME_WINDOW_HEIGHT,
   GAME_WINDOW_URL,

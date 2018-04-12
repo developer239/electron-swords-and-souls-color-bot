@@ -12,7 +12,7 @@ messageHelper.listenTo(constants.IPC_SEND_VIDEO_SCREEN, (event, args) => {
 })
 
 app.commandLine.appendSwitch('ppapi-flash-path', app.getPath('pepperFlashSystemPlugin'))
-app.commandLine.appendSwitch('ppapi-flash-version', '28.0.0.137')
+app.commandLine.appendSwitch('ppapi-flash-version', constants.PPAPI_VERSION)
 
 app.on('ready', () => {
   windows.createMainWindow(mainWindow)
