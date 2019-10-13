@@ -36,7 +36,7 @@
     "babel-register": "^7.0.0-beta.3",
     "clean-webpack-plugin": "^0.1.17",
     "electron-packager": "^10.1.1",
-    "eslint": "^4.13.1",
+    "eslint": "^4.18.2",
     "uglifyjs-webpack-plugin": "^1.1.6",
     "webpack": "^3.10.0"
   }
