@@ -3,13 +3,10 @@
     [
       "@babel/preset-env",
       {
-        "targets": {
-          "browsers": "last 2 versions"
-        }
+        "targets": "maintained node versions"
       }
     ],
-    "@babel/preset-typescript",
-    "@babel/preset-react"
+    "@babel/preset-typescript"
   ],
   "plugins": [
     [
