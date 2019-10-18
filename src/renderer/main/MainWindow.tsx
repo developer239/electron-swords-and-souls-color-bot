@@ -1,25 +1,16 @@
-import React, { useState } from 'react'
-import { WindowSelector } from './components/WindowSelector'
-import { startScreenRecording } from './helpers/capturer'
+import React, { useContext } from 'react'
+import { AppStateContext } from './providers/appState'
+import { StepCalibrateWindow } from './components/StepCalibrateWindow'
+import { StepSelectSource } from './components/StepSelectSource'
 
 export const MainWindow = () => {
-  const [source, setSource] = useState<Electron.DesktopCapturerSource | undefined>(undefined)
+  const {
+    state: { windowId },
+  } = useContext(AppStateContext)
 
-  return (
-    <div>
-      <WindowSelector
-        value={source ? source.id : undefined}
-        onChange={(newSource) => {
-          setSource(newSource)
-          startScreenRecording(newSource)
-        }}
-      />
-      {
-        source
-          ? <div>Selected source: {source.name}</div>
-          : <div>select window source</div>
-      }
-      <video />
-    </div>
-  )
+  if (!windowId) {
+    return <StepSelectSource />
+  }
+
+  return <StepCalibrateWindow />
 }

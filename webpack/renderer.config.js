@@ -28,6 +28,10 @@ module.exports = merge.smart(baseConfig, {
         enforce: 'pre',
         test: /\.js$/,
         loader: 'source-map-loader'
+      },
+      {
+        test: /\.node$/,
+        loader: 'node-loader'
       }
     ]
   },

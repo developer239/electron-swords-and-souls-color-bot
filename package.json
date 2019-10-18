@@ -20,12 +20,16 @@
     "type-check": "tsc",
     "format": "prettier --write '*/**/*.{ts,tsx,css,md,json}'",
     "lint:ts": "eslint 'src/**/*.{ts,tsx}'",
-    "lint:css": "stylelint 'src/**/*.{ts,tsx}'"
+    "lint:css": "stylelint 'src/**/*.{ts,tsx}'",
+    "electron-rebuild": "electron-rebuild -w opencv4nodejs"
   },
   "dependencies": {
     "blob-to-buffer": "^1.2.8",
+    "opencv4nodejs": "^4.17.0",
+    "ramda": "^0.26.1",
     "react": "^16.8.6",
-    "react-dom": "^16.8.6"
+    "react-dom": "^16.8.6",
+    "styled-components": "^4.4.0"
   },
   "devDependencies": {
     "@babel/core": "^7.6.4",
@@ -42,9 +46,11 @@
     "@strv/eslint-config-typescript": "2.0.0",
     "@strv/stylelint-config-styled-components": "1.1.1",
     "@types/electron-devtools-installer": "^2.2.0",
+    "@types/ramda": "^0.26.33",
     "@types/react": "^16.8.18",
     "@types/react-dom": "^16.8.4",
     "@types/react-hot-loader": "^4.1.0",
+    "@types/styled-components": "^4.1.19",
     "@types/webpack-env": "^1.13.3",
     "@typescript-eslint/parser": "1.13.0",
     "babel-eslint": "^10.0.3",
@@ -54,6 +60,7 @@
     "electron": "4.2.11",
     "electron-builder": "^21.2.0",
     "electron-devtools-installer": "^2.2.4",
+    "electron-rebuild": "^1.8.6",
     "eslint": "6.5.1",
     "eslint-config-prettier": "6.4.0",
     "eslint-plugin-react-hooks": "2.1.2",
@@ -64,6 +71,7 @@
     "husky": "^3.0.8",
     "image-webpack-loader": "^6.0.0",
     "lint-staged": "^9.4.2",
+    "node-loader": "^0.6.0",
     "nodemon": "^1.19.3",
     "prettier": "^1.18.2",
     "react-hot-loader": "^4.12.15",
