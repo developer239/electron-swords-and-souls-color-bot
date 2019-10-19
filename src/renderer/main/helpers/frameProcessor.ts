@@ -14,7 +14,6 @@ export const processFrame = async (
   profilerStart('buffer')
   drawImage(hiddenCanvas, hiddenVideo)
 
-
   const buffer = await toBlobToBuffer(hiddenCanvas)
 
   if (buffer) {

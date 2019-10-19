@@ -25,7 +25,9 @@ export const Stream: FC<IProps> = ({ script }) => {
 
   useEffect(() => {
     handleSetScript(script)
-  }, [handleSetScript, script])
+
+  // eslint-disable-next-line
+  }, [script])
 
   return (
     <div>

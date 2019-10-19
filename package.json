@@ -16,7 +16,6 @@
     "start": "electron .",
     "pack": "npm run build && electron-builder --dir",
     "dist": "npm run build && electron-builder",
-    "postinstall": "electron-builder install-app-deps",
     "type-check": "tsc",
     "format": "prettier --write '*/**/*.{ts,tsx,css,md,json}'",
     "lint:ts": "eslint 'src/**/*.{ts,tsx}'",

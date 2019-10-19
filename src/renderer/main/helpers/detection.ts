@@ -1,4 +1,4 @@
-import cv, { Mat } from 'opencv4nodejs'
+import { Mat } from 'opencv4nodejs'
 import { getMask, getRegion } from './matrix'
 import { vector } from './cv'
 
@@ -29,13 +29,17 @@ export const findNonZeroMatches = (matrix: Mat, neighbourSize: number) => {
   return matches
 }
 
+export const cropTargetRegion = (mat: Mat, offset: ICoords, width: number, height: number, scale?: number) => {
+  const targetRegion = getRegion(mat, offset, width, height)
 
-export const findMatchesByColor = (mat: Mat, lowerColor: IColor, upperColor: IColor, itemBlur: number, scale: number) => {
-  const targetRegion = getRegion(mat, { x: 1, y: 60 }, mat.cols - 100, mat.rows - 100)
-  const rescaledMat = targetRegion.rescale(1 / scale)
+  if (scale) {
+    return targetRegion.rescale(1 / scale)
+  }
 
-  const mask = getMask(rescaledMat, vector(lowerColor), vector(upperColor), itemBlur)
-  const matches = findNonZeroMatches(mask, 5)
-  cv.imshow('title', mask)
-  return matches
+  return targetRegion
+}
+
+export const findMatchesByColor = (mat: Mat, lowerColor: IColor, upperColor: IColor, itemBlur: number, neighbourSize: number) => {
+  const mask = getMask(mat, vector(lowerColor), vector(upperColor), itemBlur)
+  return findNonZeroMatches(mask, neighbourSize)
 }

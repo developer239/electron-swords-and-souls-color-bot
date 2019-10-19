@@ -1,6 +1,6 @@
 export const doesAreaContain = (topLeft: ICoords, bottomRight: ICoords) => (point: ICoords) =>
-  Boolean((point.x >= topLeft.x && point.x <= bottomRight.x) &&
-    (point.y >= topLeft.y && point.y <= bottomRight.y))
+  ((point.x >= topLeft.x && point.x <= bottomRight.x)
+    && (point.y >= topLeft.y && point.y <= bottomRight.y))
 
 export const pointsDiff = (a: ICoords, b: ICoords) => {
   const diffX = a.x - b.x
