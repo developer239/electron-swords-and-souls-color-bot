@@ -1,8 +1,9 @@
-import React, { useContext, useEffect, useRef } from 'react'
+import React, { FC, useContext, useEffect, useRef } from 'react'
 import { AppStateContext } from '../../providers/appState'
 import { VideoStreamContext } from '../../providers/videoStream'
+import { IProps } from './types'
 
-export const Stream = () => {
+export const Stream: FC<IProps> = ({ script }) => {
   const imageRef = useRef<HTMLImageElement>(null)
 
   const {
@@ -10,16 +11,21 @@ export const Stream = () => {
   } = useContext(AppStateContext)
   const {
     state: { isPlaying },
-    actions: { initializeStream, play, pause },
+    actions: { initializeStream, play, pause, handleSetScript },
   } = useContext(VideoStreamContext)
 
   useEffect(() => {
     if (imageRef.current) {
       initializeStream({ sourceId: windowId! }, imageRef.current)
+      handleSetScript(script)
     }
 
     // eslint-disable-next-line
   }, [imageRef.current])
+
+  useEffect(() => {
+    handleSetScript(script)
+  }, [handleSetScript, script])
 
   return (
     <div>

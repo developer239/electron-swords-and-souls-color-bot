@@ -1,4 +1,5 @@
 import { IRecordingOptions } from '../../helpers/recorder'
+import { IScript } from '../../components/Stream/types'
 
 export interface IVideoStreamContext {
   state: {
@@ -11,5 +12,6 @@ export interface IVideoStreamContext {
     ) => void
     play: VoidFunction
     pause: VoidFunction
+    handleSetScript: (script?: IScript) => void
   }
 }

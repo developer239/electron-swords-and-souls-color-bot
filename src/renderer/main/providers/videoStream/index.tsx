@@ -5,6 +5,7 @@ import {
   initializeVideoStream,
 } from '../../helpers/recorder'
 import { processFrame } from '../../helpers/frameProcessor'
+import { IScript } from '../../components/Stream/types'
 
 export const VideoStreamContext = createContext<IVideoStreamContext>({
   state: {
@@ -14,10 +15,12 @@ export const VideoStreamContext = createContext<IVideoStreamContext>({
     initializeStream: () => null,
     play: () => null,
     pause: () => null,
+    handleSetScript: () => null,
   },
 })
 
 export const VideoStreamProvider: FC = ({ children }) => {
+  const [script, setScript] = useState<IScript | undefined>(undefined)
   const [isPlaying, setIsPlaying] = useState<boolean>(false)
   const hiddenVideoRef = useRef<HTMLVideoElement>(null)
   const hiddenCanvasRef = useRef<HTMLCanvasElement>(null)
@@ -31,7 +34,7 @@ export const VideoStreamProvider: FC = ({ children }) => {
     if (video && canvas && displayImage) {
       await video.play()
       setIsPlaying(true)
-      await processFrame(video, canvas, displayImage)
+      await processFrame(video, canvas, displayImage, script)
     }
   }
 
@@ -56,10 +59,10 @@ export const VideoStreamProvider: FC = ({ children }) => {
     hiddenCanvasRef.current = stream.canvas
     // @ts-ignore
     displayImageRef.current = displayImage
+  }
 
-    stream.video.onloadedmetadata = async () => {
-      await play()
-    }
+  const handleSetScript = (newScript?: IScript) => {
+    setScript(newScript)
   }
 
   return (
@@ -72,6 +75,7 @@ export const VideoStreamProvider: FC = ({ children }) => {
           initializeStream,
           play,
           pause,
+          handleSetScript,
         },
       }}
     >

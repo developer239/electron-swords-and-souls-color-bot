@@ -7,7 +7,7 @@ const baseConfig = require('../../renderer.config')
 module.exports = merge.smart(baseConfig, {
   mode: 'production',
   entry: {
-    gameWindow: ['@babel/polyfill', path.resolve(__dirname, '..', '..', '..', 'src', 'renderer', 'game', 'index.tsx')],
+    gameWindow: ['@babel/polyfill', path.resolve(__dirname, '..', '..', '..', 'src', 'renderer', 'game', 'strength.ts.tsx')],
   },
   plugins: [
     new HtmlWebpackPlugin({
