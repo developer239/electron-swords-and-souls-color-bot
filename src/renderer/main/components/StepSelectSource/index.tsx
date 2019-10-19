@@ -8,9 +8,9 @@ export const StepSelectSource = () => {
   } = useContext(AppStateContext)
 
   return (
-    <>
+    <div>
       <h1>(setup 1/3) Select Game Window</h1>
       <SourceSelector onChange={selectWindow} />
-    </>
+    </div>
   )
 }

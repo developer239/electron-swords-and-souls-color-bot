@@ -9,5 +9,7 @@ export interface IAppStateContext {
     clearSelectedWindow: VoidFunction
     confirmWindowCalibration: VoidFunction
     confirmMouseOffset: (offset: ICoords) => void
+    save: VoidFunction
+    clear: VoidFunction
   }
 }

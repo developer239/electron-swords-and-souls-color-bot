@@ -1,6 +1,10 @@
 import React, { useState, createContext, FC, useEffect } from 'react'
 import { IAppStateContext } from './types'
-import { loadAppState, saveAppState } from '../../helpers/storage'
+import {
+  loadAppState,
+  saveAppState,
+  clearAppState,
+} from '../../helpers/storage'
 
 export const AppStateContext = createContext<IAppStateContext>({
   state: {
@@ -13,6 +17,8 @@ export const AppStateContext = createContext<IAppStateContext>({
     clearSelectedWindow: () => null,
     confirmWindowCalibration: () => null,
     confirmMouseOffset: () => null,
+    save: () => null,
+    clear: () => null,
   },
 })
 
@@ -27,20 +33,32 @@ export const AppStateProvider: FC = ({ children }) => {
     setWindowId(appState.windowId)
     setIsWindowCalibrated(appState.isWindowCalibrated)
     setMouseOffset(appState.mouseOffset)
-  // eslint-disable-next-line
+    // eslint-disable-next-line
   }, [])
+
+  const save = () => {
+    saveAppState({
+      windowId,
+      isWindowCalibrated,
+      mouseOffset,
+    })
+  }
+
+  const clear = () => {
+    clearAppState()
+    location.reload(true)
+  }
 
   const selectWindow = (id: string) => setWindowId(id)
   const clearSelectedWindow = () => setWindowId(undefined)
   const confirmWindowCalibration = () => setIsWindowCalibrated(true)
   const confirmMouseOffset = (offset: ICoords) => {
+    setMouseOffset(offset)
     saveAppState({
       windowId,
       isWindowCalibrated,
       mouseOffset: offset,
     })
-
-    setMouseOffset(offset)
   }
 
   return (
@@ -56,6 +74,8 @@ export const AppStateProvider: FC = ({ children }) => {
           clearSelectedWindow,
           confirmWindowCalibration,
           confirmMouseOffset,
+          save,
+          clear,
         },
       }}
     >

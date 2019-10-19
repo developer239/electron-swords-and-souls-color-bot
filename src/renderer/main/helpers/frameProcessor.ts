@@ -5,7 +5,7 @@ import { profilerEnd, profilerStart } from './profiler'
 export const processFrame = async (
   hiddenVideo: HTMLVideoElement,
   hiddenCanvas: HTMLCanvasElement,
-  displayImage: HTMLImageElement,
+  displayImage: HTMLImageElement
 ) => {
   drawImage(hiddenCanvas, hiddenVideo)
 
@@ -20,5 +20,7 @@ export const processFrame = async (
     displayImage.src = `data:image/jpeg;base64,${base64}`
   }
 
-  await processFrame(hiddenVideo, hiddenCanvas, displayImage)
+  if (!hiddenVideo.paused) {
+    await processFrame(hiddenVideo, hiddenCanvas, displayImage)
+  }
 }
