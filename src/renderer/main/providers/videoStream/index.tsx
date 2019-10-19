@@ -31,7 +31,7 @@ export const VideoStreamProvider: FC = ({ children }) => {
     if (video && canvas && displayImage) {
       await video.play()
       setIsPlaying(true)
-      processFrame(video, canvas, displayImage)
+      await processFrame(video, canvas, displayImage)
     }
   }
 

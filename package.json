@@ -29,6 +29,7 @@
     "ramda": "^0.26.1",
     "react": "^16.8.6",
     "react-dom": "^16.8.6",
+    "robotjs": "git+https://github.com/malhotra-sidharth/robotjs.git",
     "styled-components": "^4.4.0"
   },
   "devDependencies": {

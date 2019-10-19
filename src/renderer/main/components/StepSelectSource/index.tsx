@@ -9,7 +9,7 @@ export const StepSelectSource = () => {
 
   return (
     <>
-      <h1>(setup 1/2) Select Game Window</h1>
+      <h1>(setup 1/3) Select Game Window</h1>
       <SourceSelector onChange={selectWindow} />
     </>
   )

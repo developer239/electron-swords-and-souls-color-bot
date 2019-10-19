@@ -1,16 +1,49 @@
-import React, { useContext } from 'react'
+import React, { useContext, useEffect, useRef } from 'react'
 import { AppStateContext } from './providers/appState'
 import { StepCalibrateWindow } from './components/StepCalibrateWindow'
 import { StepSelectSource } from './components/StepSelectSource'
+import { StepCalibrateMouse } from './components/StepCalibrateMouse'
+import { VideoStreamContext } from './providers/videoStream'
 
 export const MainWindow = () => {
-  const {
-    state: { windowId },
-  } = useContext(AppStateContext)
+  const imageRef = useRef<HTMLImageElement>(null)
 
-  if (!windowId) {
-    return <StepSelectSource />
+  const {
+    state: { windowId, isWindowCalibrated, mouseOffset },
+  } = useContext(AppStateContext)
+  const {
+    actions: { initializeStream },
+  } = useContext(VideoStreamContext)
+
+  useEffect(() => {
+    if (imageRef.current) {
+      initializeStream({ sourceId: windowId! }, imageRef.current)
+    }
+
+  // eslint-disable-next-line
+  }, [imageRef.current])
+
+  const renderStep = () => {
+    if (!windowId) {
+      return <StepSelectSource />
+    }
+
+    if (!isWindowCalibrated) {
+      return <StepCalibrateWindow />
+    }
+
+    if (!mouseOffset) {
+      return <StepCalibrateMouse />
+    }
+
+    return null
   }
 
-  return <StepCalibrateWindow />
+  return (
+    <>
+      {renderStep()}
+      <img ref={imageRef} />
+    </>
+  )
+
 }
