@@ -1,6 +1,6 @@
 import robot from 'robotjs'
 
-robot.setMouseDelay(1)
+robot.setMouseDelay(10)
 robot.setKeyboardDelay(1)
 
 export const bot = {

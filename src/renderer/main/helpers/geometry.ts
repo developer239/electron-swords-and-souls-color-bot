@@ -7,3 +7,8 @@ export const pointsDiff = (a: ICoords, b: ICoords) => {
   const diffY = a.y - b.y
   return Math.sqrt(diffX * diffX + diffY * diffY)
 }
+
+export const areaCenter = (a: ICoords, b: ICoords): ICoords => ({
+  x: (a.x + b.x) / 2,
+  y: (a.y + b.y) / 2,
+})

@@ -41,8 +41,8 @@ export const StepCalibrateMouse = () => {
           })
         }}
       >
-        <input type="text" name="x" placeholder="x" />
-        <input type="text" name="y" placeholder="y" />
+        <input type="number" name="x" placeholder="x" />
+        <input type="number" name="y" placeholder="y" />
         <button type="submit">confirm mouse position</button>
       </form>
     </div>

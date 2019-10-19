@@ -88,7 +88,7 @@ export const playStrength = () => ({
     }
 
 
-    // // draw areas
+    // draw areas
     for (const area of [CHARACTER_AREA, STAR_AREA, ...APPLE_AREAS]) {
       drawRectangle(mat, area.topLeft, area.bottomRight)
     }

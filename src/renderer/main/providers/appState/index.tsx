@@ -53,11 +53,17 @@ export const AppStateProvider: FC = ({ children }) => {
   const clearSelectedWindow = () => setWindowId(undefined)
   const confirmWindowCalibration = () => setIsWindowCalibrated(true)
   const confirmMouseOffset = (offset: ICoords) => {
-    setMouseOffset(offset)
+    setMouseOffset({
+      x: Number(offset.x),
+      y: Number(offset.y),
+    })
     saveAppState({
       windowId,
       isWindowCalibrated,
-      mouseOffset: offset,
+      mouseOffset: {
+        x: Number(offset.x),
+        y: Number(offset.y),
+      },
     })
   }
 
