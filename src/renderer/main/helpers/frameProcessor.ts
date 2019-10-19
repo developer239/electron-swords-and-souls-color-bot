@@ -7,26 +7,30 @@ export const processFrame = async (
   hiddenVideo: HTMLVideoElement,
   hiddenCanvas: HTMLCanvasElement,
   displayImage: HTMLImageElement,
-  script?: IScript
+  index: number,
+  script?: IScript,
 ) => {
+  profilerEnd('buffer')
+  profilerStart('buffer')
   drawImage(hiddenCanvas, hiddenVideo)
 
-  profilerStart('buffer')
+
   const buffer = await toBlobToBuffer(hiddenCanvas)
-  profilerEnd('buffer')
 
   if (buffer) {
     const mat = cv.imdecode(buffer)
 
-    const base64 = cv.imencode('.jpg', mat).toString('base64')
-    displayImage.src = `data:image/jpeg;base64,${base64}`
-
-    if (script && !hiddenVideo.paused) {
-      script.action(mat)
+    if (script) {
+      const updatedMat = await script.action(mat, index)
+      const base64 = cv.imencode('.jpg', updatedMat).toString('base64')
+      displayImage.src = `data:image/jpeg;base64,${base64}`
+    } else {
+      const base64 = cv.imencode('.jpg', mat).toString('base64')
+      displayImage.src = `data:image/jpeg;base64,${base64}`
     }
   }
 
   if (!hiddenVideo.paused) {
-    await processFrame(hiddenVideo, hiddenCanvas, displayImage, script)
+    await processFrame(hiddenVideo, hiddenCanvas, displayImage, index + 1, script)
   }
 }

@@ -1,7 +1,7 @@
 import { Mat } from 'opencv4nodejs'
 
 export interface IScript {
-  action: (mat: Mat) => Promise<void> | void
+  action: (mat: Mat, index: number) => Promise<Mat> | Mat
 }
 
 export interface IProps {
