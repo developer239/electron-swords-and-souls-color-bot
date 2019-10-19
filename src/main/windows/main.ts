@@ -1,9 +1,14 @@
-import { app } from 'electron'
+import { app, globalShortcut } from 'electron'
 import { generateWindowObject, createWindow } from '../helpers/window'
+import { send } from '../helpers/message'
 
 const mainWindowReference = generateWindowObject()
 
 app.on('ready', () => {
+  globalShortcut.register('CommandOrControl+P', () => {
+    send(mainWindowReference)('play-pause')
+  })
+
   createWindow(mainWindowReference)(
     'main',
     {

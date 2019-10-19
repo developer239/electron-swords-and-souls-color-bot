@@ -1,4 +1,5 @@
-import React, { useState, createContext, FC, useRef } from 'react'
+import React, { useState, createContext, FC, useRef, useEffect } from 'react'
+import { ipcRenderer } from 'electron'
 import { IVideoStreamContext } from './types'
 import {
   IRecordingOptions,
@@ -6,6 +7,7 @@ import {
 } from '../../helpers/recorder'
 import { processFrame } from '../../helpers/frameProcessor'
 import { IScript } from '../../components/Stream/types'
+import { listenTo } from '../../helpers/message'
 
 export const VideoStreamContext = createContext<IVideoStreamContext>({
   state: {
@@ -46,6 +48,23 @@ export const VideoStreamProvider: FC = ({ children }) => {
       setIsPlaying(false)
     }
   }
+
+  useEffect(() => {
+    listenTo('play-pause', async () => {
+      if (isPlaying) {
+        pause()
+      } else {
+        await play()
+      }
+    })
+
+    return () => {
+      // @ts-ignore
+      ipcRenderer.removeAllListeners()
+    }
+
+  // eslint-disable-next-line
+  }, [isPlaying])
 
   const initializeStream = async (
     options: IRecordingOptions,
