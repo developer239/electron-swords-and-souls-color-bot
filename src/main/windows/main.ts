@@ -9,7 +9,7 @@ app.on('ready', () => {
     {
       x: 0,
       y: 0,
-      height: 600,
+      height: 800,
       width: 1000,
       resizable: true,
     },
