@@ -1,4 +1,4 @@
-import { Mat } from 'opencv4nodejs'
+import cv, { Mat } from 'opencv4nodejs'
 import { getMask, getRegion } from './matrix'
 import { vector } from './cv'
 
@@ -42,4 +42,11 @@ export const cropTargetRegion = (mat: Mat, offset: ICoords, width: number, heigh
 export const findMatchesByColor = (mat: Mat, lowerColor: IColor, upperColor: IColor, itemBlur: number, neighbourSize: number) => {
   const mask = getMask(mat, vector(lowerColor), vector(upperColor), itemBlur)
   return findNonZeroMatches(mask, neighbourSize)
+}
+
+export const findMatchByImg = (originalMat: Mat, templateMat: Mat) => {
+  const matched = originalMat.matchTemplate(templateMat, 5)
+  const minMax = matched.minMaxLoc()
+  const { maxLoc: { x, y } } = minMax
+  return { x, y }
 }

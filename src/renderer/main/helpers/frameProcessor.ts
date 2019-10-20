@@ -10,8 +10,8 @@ export const processFrame = async (
   index: number,
   script?: IScript,
 ) => {
-  profilerEnd('buffer')
-  profilerStart('buffer')
+  // profilerEnd('buffer')
+  // profilerStart('buffer')
   drawImage(hiddenCanvas, hiddenVideo)
 
   const buffer = await toBlobToBuffer(hiddenCanvas)
