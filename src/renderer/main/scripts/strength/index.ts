@@ -17,12 +17,12 @@ import { blackList } from './blackList'
 
 export const playStrength = () => ({
   action: (mat: Mat, index: number) => {
-    if (index % 3 !== 0) {
+    if (index % 2 !== 0) {
       return mat
     }
 
     // detect apples
-    const APPLE_SCALE = 10
+    const APPLE_SCALE = 5
     const APPLE_OFFSET = {
       x: 100,
       y: CHROME_HEADER_HEIGHT + 150,
@@ -137,7 +137,7 @@ export const playStrength = () => ({
       }, null as unknown as IMatch)
 
       const targetKey = closestApple.area!.key!
-      blackList.addKeyToBlackList(targetKey)
+      blackList.addKeyToBlackList(targetKey, 350)
       bot.keyTap(targetKey)
 
       return mat
@@ -145,7 +145,7 @@ export const playStrength = () => ({
 
     if (relevantStars.length) {
       const targetKey = STAR_AREA.key!
-      blackList.addKeyToBlackList(targetKey, 600)
+      blackList.addKeyToBlackList(targetKey, 450)
       bot.keyTap(targetKey)
     }
 

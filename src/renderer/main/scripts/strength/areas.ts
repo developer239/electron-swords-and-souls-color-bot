@@ -6,8 +6,8 @@ export const CHARACTER_AREA: IArea = {
 }
 
 export const STAR_AREA: IArea = {
-  topLeft: { x: 20, y: 270 },
-  bottomRight: { x: 60, y: 376 },
+  topLeft: { x: 20, y: 280 },
+  bottomRight: { x: 60, y: 416 },
   key: 'left',
 }
 
@@ -19,12 +19,12 @@ export const APPLE_AREAS: IArea[] = [
   },
   {
     topLeft: { x: CHARACTER_HIT_X, y: 330 },
-    bottomRight: { x: CHARACTER_HIT_X + 295, y: 360 },
+    bottomRight: { x: CHARACTER_HIT_X + 165, y: 360 },
     key: 'right',
   },
   {
     topLeft: { x: CHARACTER_HIT_X, y: 400 },
-    bottomRight: { x: CHARACTER_HIT_X + 175, y: 420 },
+    bottomRight: { x: CHARACTER_HIT_X + 165, y: 420 },
     key: 'down',
   }
 ]
